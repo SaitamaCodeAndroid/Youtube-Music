@@ -28,6 +28,8 @@ android {
         properties.load(project.rootProject.file("local.properties").inputStream())
         buildConfigField("String", "CLIENT_ID", properties.getProperty("CLIENT_ID"))
         buildConfigField("String", "CLIENT_SECRET", properties.getProperty("CLIENT_SECRET"))
+        buildConfigField("String", "AUTHENTICATION_URL", "\"https://accounts.spotify.com/\"")
+        buildConfigField("String", "BASE_URL", "\"https://api.spotify.com/\"")
     }
 
     buildTypes {
@@ -64,8 +66,8 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation("androidx.activity:activity-compose:1.8.0")
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation(platform("androidx.compose:compose-bom:2023.10.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -73,26 +75,26 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2023.10.01"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // Hilt
     // https://developer.android.com/jetpack/androidx/releases/hilt?hl=vi
-    val hiltVersion = "2.46.1"
+    val hiltVersion = "2.50"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
 
     // Navigation Component
     // https://developer.android.com/jetpack/androidx/releases/navigation
     // Jetpack Compose Integration
-    val navVersion = "2.7.4"
+    val navVersion = "2.7.6"
     implementation("androidx.navigation:navigation-compose:$navVersion")
 
     // Media3
     // https://developer.android.com/jetpack/androidx/releases/media3?hl=vi
-    val media3Version = "1.1.1"
+    val media3Version = "1.2.0"
     implementation("androidx.media3:media3-exoplayer:$media3Version")
 
     // Paging
@@ -105,5 +107,17 @@ dependencies {
     // https://square.github.io/retrofit/
     val retrofitVersion = "2.9.0"
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+
+    // OkHttp
+    val okHttpVersion = "4.12.0"
+    implementation("com.squareup.okhttp3:okhttp:$okHttpVersion")
+
+    // Data store
+    val dataStoreVersion = "1.0.0"
+    implementation("androidx.datastore:datastore:$dataStoreVersion")
+
+    // Tracing
+    val traceVersion = "1.2.0"
+    implementation("androidx.tracing:tracing-ktx:$traceVersion")
 }

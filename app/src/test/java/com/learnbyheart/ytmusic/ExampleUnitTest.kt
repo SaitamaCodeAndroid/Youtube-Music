@@ -1,4 +1,4 @@
-package com.learnbyheart.spotify
+package com.learnbyheart.ytmusic
 
 import org.junit.Test
 

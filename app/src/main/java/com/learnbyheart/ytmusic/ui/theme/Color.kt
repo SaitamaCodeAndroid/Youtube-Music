@@ -1,4 +1,4 @@
-package com.learnbyheart.spotify.ui.theme
+package com.learnbyheart.ytmusic.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
@@ -9,3 +9,7 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
+
+val Black = Color(0xFF212121)
+val Grey808080 = Color(0xFF808080)
+val GreyEDEDED = Color(0xFFEDEDED)

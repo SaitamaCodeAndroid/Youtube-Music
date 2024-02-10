@@ -1,4 +1,4 @@
-package com.learnbyheart.spotify.ui.theme
+package com.learnbyheart.ytmusic.ui.theme
 
 import android.app.Activity
 import android.os.Build
