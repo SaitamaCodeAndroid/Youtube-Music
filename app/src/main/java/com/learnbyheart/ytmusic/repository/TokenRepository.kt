@@ -1,8 +1,8 @@
 package com.learnbyheart.ytmusic.repository
 
-import com.learnbyheart.ytmusic.data.remote.token.BearerToken
+import com.learnbyhear.core.domain.token.BearerToken
 
 interface TokenRepository {
 
-    suspend fun getBearerToken(): BearerToken
+    suspend fun getBearerToken(): com.learnbyhear.core.domain.token.BearerToken
 }
