@@ -3,18 +3,18 @@ package com.learnbyheart.ytmusic.repository
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.learnbyheart.ytmusic.data.remote.service.AuthenticationService
-import com.learnbyheart.ytmusic.data.remote.token.BearerToken
-import com.learnbyheart.ytmusic.data.remote.token.getSpotifyClientSecret
+import com.learnbyhear.core.domain.token.BearerToken
+import com.learnbyhear.core.domain.token.getSpotifyClientSecret
 import javax.inject.Inject
 
 class TokenRepositoryImpl @Inject constructor(
     private val authenticationService: AuthenticationService
 ) : TokenRepository {
 
-    private var token: BearerToken? = null
+    private var token: com.learnbyhear.core.domain.token.BearerToken? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun getBearerToken(): BearerToken {
+    override suspend fun getBearerToken(): com.learnbyhear.core.domain.token.BearerToken {
         if (token == null || token?.isExpired == true) {
             getAndAssignToken()
         }
@@ -26,7 +26,7 @@ class TokenRepositoryImpl @Inject constructor(
      */
     @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getAndAssignToken() {
-        val clientSecret = getSpotifyClientSecret()
+        val clientSecret = com.learnbyhear.core.domain.token.getSpotifyClientSecret()
         token = authenticationService
             .getAccessToken(clientSecret)
             .toBearerToken()

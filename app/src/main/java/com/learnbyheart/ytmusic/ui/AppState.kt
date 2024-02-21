@@ -38,7 +38,7 @@ class AppState(
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
             HOME_ROUTE -> TopLevelDestination.Home
-            TopLevelDestination.Search.route -> TopLevelDestination.Search
+            //TopLevelDestination.Search.route -> TopLevelDestination.Search
             else -> null
         }
 
@@ -61,7 +61,7 @@ class AppState(
 
             when (topLevelDestination) {
                 TopLevelDestination.Home -> navController.navigateToHome(topLevelNavOptions)
-                TopLevelDestination.Search -> navController.navigateToSearch(topLevelNavOptions)
+                //TopLevelDestination.Search -> navController.navigateToSearch(topLevelNavOptions)
             }
         }
     }

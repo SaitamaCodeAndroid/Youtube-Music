@@ -15,4 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Spotify"
 include(":app")
- 
+include(":core")
+include(":core:network")
