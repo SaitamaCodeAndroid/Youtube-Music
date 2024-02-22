@@ -1,9 +1,8 @@
 package com.learnbyheart.core.network.token
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.google.gson.annotations.SerializedName
-import java.time.LocalDateTime
+import com.learnbyheart.core.model.BearerToken
+import java.util.Calendar
 
 data class AccessTokenResponse(
     @SerializedName("access_token")
@@ -12,10 +11,15 @@ data class AccessTokenResponse(
     val secondsUntilExpiration: Int,
 ) {
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    private val timeOfExpiration: Int
+        get() {
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.SECOND, secondsUntilExpiration)
+            return calendar.timeInMillis.toInt()
+        }
+
     fun toBearerToken(): BearerToken = BearerToken(
         bearerToken = accessToken,
-        timeOfCreation = LocalDateTime.now(),
-        secondsUntilExpiration = secondsUntilExpiration
+        expirationTimeInMillis = timeOfExpiration
     )
 }

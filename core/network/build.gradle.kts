@@ -16,13 +16,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        val properties = Properties()
-        properties.load(project.rootProject.file("local.properties").inputStream())
-        buildConfigField("String", "CLIENT_ID", properties.getProperty("CLIENT_ID"))
-        buildConfigField("String", "CLIENT_SECRET", properties.getProperty("CLIENT_SECRET"))
-        buildConfigField("String", "AUTHENTICATION_URL", "\"https://accounts.spotify.com/\"")
-        buildConfigField("String", "BASE_URL", "\"https://api.spotify.com/\"")
     }
 
     buildTypes {
@@ -47,6 +40,8 @@ android {
 }
 
 dependencies {
+
+    implementation(project(":core:model"))
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

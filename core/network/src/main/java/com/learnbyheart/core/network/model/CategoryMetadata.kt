@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class CategoryMetadata(
     @SerializedName("items")
-    val categories: List<Category>,
+    val categories: List<com.learnbyheart.core.model.Category>,
 )
