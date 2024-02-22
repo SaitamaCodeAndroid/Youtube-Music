@@ -95,10 +95,6 @@ dependencies {
     val pagingVersion = "3.3.0-alpha03"
     implementation("androidx.paging:paging-compose:$pagingVersion")
 
-    // Data store
-    val dataStoreVersion = "1.0.0"
-    implementation("androidx.datastore:datastore:$dataStoreVersion")
-
     // Tracing
     val traceVersion = "1.2.0"
     implementation("androidx.tracing:tracing-ktx:$traceVersion")
