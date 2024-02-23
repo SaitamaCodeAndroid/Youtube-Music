@@ -1,5 +1,7 @@
 package com.learnbyheart.core.network.model
 
+import com.learnbyheart.core.model.Track
+
 data class RecommendationTrackResponse(
-    val tracks: List<com.learnbyheart.core.model.Track>,
+    val tracks: List<Track>,
 )
