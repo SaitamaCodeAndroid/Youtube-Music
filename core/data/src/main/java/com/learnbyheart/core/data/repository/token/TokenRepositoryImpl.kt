@@ -1,4 +1,4 @@
-package com.learnbyheart.core.data.repository
+package com.learnbyheart.core.data.repository.token
 
 import com.learnbyheart.core.data.datastore.PreferenceDataStore
 import com.learnbyheart.core.model.BearerToken

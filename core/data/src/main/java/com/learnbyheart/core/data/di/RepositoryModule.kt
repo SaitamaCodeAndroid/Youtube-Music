@@ -1,7 +1,9 @@
 package com.learnbyheart.core.data.di
 
-import com.learnbyheart.core.data.repository.TokenRepository
-import com.learnbyheart.core.data.repository.TokenRepositoryImpl
+import com.learnbyheart.core.data.repository.home.HomeDataRepository
+import com.learnbyheart.core.data.repository.home.HomeDataRepositoryImpl
+import com.learnbyheart.core.data.repository.token.TokenRepository
+import com.learnbyheart.core.data.repository.token.TokenRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,4 +17,9 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindTokenRepository(tokenRepositoryImpl: TokenRepositoryImpl): TokenRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindHomeDataRepository(homeDataRepositoryImpl: HomeDataRepositoryImpl): HomeDataRepository
+
 }

@@ -5,7 +5,6 @@ import com.learnbyheart.core.network.model.CategoryResponse
 import com.learnbyheart.core.network.model.PlayListResponse
 import com.learnbyheart.core.network.model.RecommendationTrackResponse
 import com.learnbyheart.core.network.token.AccessTokenResponse
-import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -14,6 +13,8 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 private const val API_VERSION = "v1"
+private const val RECOMMEND_TRACKS_LIMIT = 20
+private const val POPULAR_TRACKS_LIMIT = 40
 
 interface MusicService {
 
@@ -28,21 +29,33 @@ interface MusicService {
      * Get recommendations tracks
      */
     @GET("${API_VERSION}/recommendations")
-    suspend fun getRecommendationAlbums(
+    suspend fun getRecommendationTracks(
+        @Query("limit") limit: Int = RECOMMEND_TRACKS_LIMIT,
         @Header("Authorization") authorization: String,
-        @Query("limit") limit: Int = 10,
         @Query("market") countryCode: String,
         @Query("seed_genres") genres: String,
-    ): Response<RecommendationTrackResponse>
+    ): RecommendationTrackResponse
 
     /**
-     * Get a list of albums by category
+     * Get the most listened tracks
+     */
+    @GET("${API_VERSION}/recommendations")
+    suspend fun getPopularTracks(
+        @Query("limit") limit: Int = POPULAR_TRACKS_LIMIT,
+        @Query("target_popularity") popularity: Int = 100,
+        @Header("Authorization") authorization: String,
+        @Query("market") countryCode: String,
+        @Query("seed_genres") genres: String,
+    ): RecommendationTrackResponse
+
+    /**
+     * Get a list of music categories
      */
     @GET("${API_VERSION}/browse/categories")
-    suspend fun getAlbumsByCategory(
+    suspend fun getCategories(
         @Header("Authorization") authorization: String,
         @Query("locale") locale: String,
-    ): Response<CategoryResponse>
+    ): CategoryResponse
 
     /**
      * Get a list of new album releases featured
@@ -51,7 +64,7 @@ interface MusicService {
     suspend fun getNewReleaseAlbums(
         @Header("Authorization") authorization: String,
         @Query("locale") locale: String,
-    ): Response<AlbumResponse>
+    ): AlbumResponse
 
     /**
      * Get a list of Spotify featured playlists
@@ -60,6 +73,6 @@ interface MusicService {
     suspend fun getFeaturedPlaylist(
         @Header("Authorization") authorization: String,
         @Query("locale") locale: String,
-    ): Response<PlayListResponse>
+    ): PlayListResponse
 
 }
