@@ -10,9 +10,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.learnbyheart.ytmusic.ui.navigation.TopLevelDestination
-import com.learnbyheart.ytmusic.ui.screens.home.HOME_ROUTE
-import com.learnbyheart.ytmusic.ui.screens.home.navigateToHome
-import com.learnbyheart.ytmusic.ui.screens.search.navigateToSearch
+import com.learnbyheart.feature.home.HOME_ROUTE
+import com.learnbyheart.feature.home.navigateToHome
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -37,7 +36,7 @@ class AppState(
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
-            HOME_ROUTE -> TopLevelDestination.Home
+            com.learnbyheart.feature.home.HOME_ROUTE -> TopLevelDestination.Home
             //TopLevelDestination.Search.route -> TopLevelDestination.Search
             else -> null
         }

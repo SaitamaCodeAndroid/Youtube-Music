@@ -6,9 +6,9 @@ import com.learnbyheart.core.data.repository.token.TokenRepository
 import com.learnbyheart.core.model.BearerToken
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -16,18 +16,19 @@ class GetAccessTokenInteractor @Inject constructor(
     private val tokenRepository: TokenRepository
 ) {
 
-    operator fun invoke(): Flow<BearerToken> = tokenRepository
-        .getSavedAccessToken()
-        .flatMapLatest { token ->
-            if (token.isExpired) {
-                tokenRepository.getNewAccessToken(getSpotifyClientSecret())
-                    .map {
-                        it.toBearerToken()
-                    }
-            } else {
+    operator fun invoke(): Flow<BearerToken> {
+        return tokenRepository
+            .getSavedAccessToken()
+            .flatMapLatest { token ->
+                if (token.isExpired || token.bearerToken.isEmpty()) {
+                    tokenRepository.getNewAccessToken(getSpotifyClientSecret())
+                        .collectLatest {
+                            tokenRepository.saveAccessToken(it.toBearerToken())
+                        }
+                }
                 flowOf(token)
             }
-        }
+    }
 
     private fun getSpotifyClientSecret(): String {
         val encoderClientSecret = Base64.encodeToString(

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Album(
     val id: String,
-    @SerializedName("album_type")
+    @SerializedName("artists")
     val artists: List<Artist>,
     val images: List<Image>,
     val name: String,

@@ -1,11 +1,8 @@
-import java.util.Properties
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
-    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -55,6 +52,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature:home"))
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
@@ -64,13 +62,6 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.02.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // Hilt
     // https://developer.android.com/jetpack/androidx/releases/hilt?hl=vi
@@ -80,20 +71,8 @@ dependencies {
 
     // Navigation Component
     // https://developer.android.com/jetpack/androidx/releases/navigation
-    // Jetpack Compose Integration
     val navVersion = "2.7.7"
     implementation("androidx.navigation:navigation-compose:$navVersion")
-
-    // Media3
-    // https://developer.android.com/jetpack/androidx/releases/media3?hl=vi
-    val media3Version = "1.2.1"
-    implementation("androidx.media3:media3-exoplayer:$media3Version")
-
-    // Paging
-    // https://developer.android.com/jetpack/androidx/releases/paging
-    // Jetpack Compose integration
-    val pagingVersion = "3.3.0-alpha03"
-    implementation("androidx.paging:paging-compose:$pagingVersion")
 
     // Tracing
     val traceVersion = "1.2.0"

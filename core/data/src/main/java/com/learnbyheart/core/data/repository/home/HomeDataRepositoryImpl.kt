@@ -16,12 +16,19 @@ class HomeDataRepositoryImpl @Inject constructor(
         "pop"
     )
 
+    override suspend fun getCategories(token: String) = flow {
+        val response = dataSource.getCategories(
+            token = token,
+        )
+        emit(response)
+    }
+
     override suspend fun getRecommendationTracks(
         token: String,
     ) = flow {
         val response = dataSource.getRecommendationTracks(
             token = token,
-            genres = genres.toString(),
+            genres = genres.joinToString(","),
         )
         emit(response)
     }
@@ -31,14 +38,7 @@ class HomeDataRepositoryImpl @Inject constructor(
     ) = flow {
         val response = dataSource.getPopularTracks(
             token = token,
-            genres = genres.toString(),
-        )
-        emit(response)
-    }
-
-    override suspend fun getCategories(token: String) = flow {
-        val response = dataSource.getCategories(
-            token = token,
+            genres = genres.joinToString(","),
         )
         emit(response)
     }
