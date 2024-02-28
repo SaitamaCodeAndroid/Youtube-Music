@@ -2,14 +2,14 @@ package com.learnbyheart.core.data.repository.token
 
 import com.learnbyheart.core.data.datastore.PreferenceDataStore
 import com.learnbyheart.core.model.BearerToken
-import com.learnbyheart.core.network.service.MusicService
+import com.learnbyheart.core.network.service.AuthenticationService
 import com.learnbyheart.core.network.token.AccessTokenResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class TokenRepositoryImpl @Inject constructor(
-    private val service: MusicService,
+    private val authService: AuthenticationService,
     private val preferenceDataStore: PreferenceDataStore,
 ) : TokenRepository {
 
@@ -17,7 +17,7 @@ class TokenRepositoryImpl @Inject constructor(
      * Get a new user access token.
      */
     override fun getNewAccessToken(clientSecret: String): Flow<AccessTokenResponse> = flow {
-        val response = service.getAccessToken(clientSecret)
+        val response = authService.getAccessToken(clientSecret)
         emit(response)
     }
 
@@ -33,7 +33,7 @@ class TokenRepositoryImpl @Inject constructor(
      */
     override suspend fun saveAccessToken(bearerToken: BearerToken) {
         preferenceDataStore.saveAccessToken(
-            token = bearerToken.value,
+            token = bearerToken.bearerToken,
             expiredTime = bearerToken.expirationTimeInMillis,
         )
     }

@@ -3,7 +3,7 @@ package com.learnbyheart.core.data.datastore
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.learnbyheart.core.model.BearerToken
 import kotlinx.coroutines.flow.Flow
@@ -18,7 +18,7 @@ class PreferenceDataStore @Inject constructor(
 ) {
 
     private val accessTokenKey = stringPreferencesKey(PREFERENCE_ACCESS_TOKEN)
-    private val expiredTimeKey = intPreferencesKey(PREFERENCE_EXPIRED_TIME)
+    private val expiredTimeKey = longPreferencesKey(PREFERENCE_EXPIRED_TIME)
 
     fun getAccessToken(): Flow<BearerToken> = dataStore.data
         .map { preference ->
@@ -30,7 +30,7 @@ class PreferenceDataStore @Inject constructor(
 
     suspend fun saveAccessToken(
         token: String,
-        expiredTime: Int,
+        expiredTime: Long,
     ) {
         dataStore.edit { preference ->
             preference[accessTokenKey] = token

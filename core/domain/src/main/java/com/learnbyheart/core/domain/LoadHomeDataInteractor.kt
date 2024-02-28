@@ -25,7 +25,7 @@ class LoadHomeDataInteractor @Inject constructor(
                 val token = bearerToken.value
 
                 combine(
-                    homeDataRepository.getRecommendationTracks(token),
+                    homeDataRepository.getRecommendationTracks(bearerToken.value),
                     homeDataRepository.getPopularTracks(token),
                     homeDataRepository.getFeaturedPlaylist(token),
                     homeDataRepository.getNewReleaseAlbums(token),
@@ -43,12 +43,9 @@ class LoadHomeDataInteractor @Inject constructor(
                                 id = it.id,
                                 name = it.name,
                                 image = it.album.images[0].url,
-                            )
-                        )
-                        homeDataList.add(
-                            HomeDataUiState(
-                                musicType = HomeDataType.RECOMMENDATION_TRACK,
-                                items = recommendedTrackList
+                                artists = it.artists.joinToString(" & ") { artist ->
+                                    artist.name
+                                }
                             )
                         )
 
@@ -57,15 +54,24 @@ class LoadHomeDataInteractor @Inject constructor(
                                 id = it.album.id,
                                 name = it.album.name,
                                 image = it.album.images[0].url,
-                            )
-                        )
-                        homeDataList.add(
-                            HomeDataUiState(
-                                musicType = HomeDataType.RECOMMENDATION_ALBUM,
-                                items = recommendedAlbumList
+                                artists = it.artists.joinToString(" & ") { artist ->
+                                    artist.name
+                                }
                             )
                         )
                     }
+                    homeDataList.add(
+                        HomeDataUiState(
+                            musicType = HomeDataType.RECOMMENDATION_TRACK,
+                            items = recommendedTrackList
+                        )
+                    )
+                    homeDataList.add(
+                        HomeDataUiState(
+                            musicType = HomeDataType.RECOMMENDATION_ALBUM,
+                            items = recommendedAlbumList
+                        )
+                    )
 
                     popularTrackList.addAll(
                         flow2.tracks.map {
@@ -73,6 +79,9 @@ class LoadHomeDataInteractor @Inject constructor(
                                 id = it.id,
                                 name = it.name,
                                 image = it.album.images[0].url,
+                                artists = it.artists.joinToString(" & ") { artist ->
+                                    artist.name
+                                }
                             )
                         }
                     )
@@ -105,6 +114,7 @@ class LoadHomeDataInteractor @Inject constructor(
                                 id = it.id,
                                 name = it.name,
                                 image = it.images[0].url,
+                                artists = ""
                             )
                         }
                     )

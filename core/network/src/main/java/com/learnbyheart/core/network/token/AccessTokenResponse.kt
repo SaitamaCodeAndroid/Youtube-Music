@@ -11,11 +11,11 @@ data class AccessTokenResponse(
     val secondsUntilExpiration: Int,
 ) {
 
-    private val timeOfExpiration: Int
+    private val timeOfExpiration: Long
         get() {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.SECOND, secondsUntilExpiration)
-            return calendar.timeInMillis.toInt()
+            return calendar.time.time
         }
 
     fun toBearerToken(): BearerToken = BearerToken(

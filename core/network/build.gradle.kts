@@ -16,6 +16,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "AUTHENTICATION_URL", "\"https://accounts.spotify.com/\"")
+        buildConfigField("String", "BASE_URL", "\"https://api.spotify.com/\"")
     }
 
     buildTypes {

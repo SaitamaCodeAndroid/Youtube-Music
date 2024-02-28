@@ -6,7 +6,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 private const val DEFAULT_COUNTRY_CODE = "US"
-private const val DEFAULT_LOCALE = "en-US"
+private const val DEFAULT_LOCALE = "en_US"
 
 class MusicDataSource @Inject constructor(
     private val service: MusicService
@@ -27,7 +27,7 @@ class MusicDataSource @Inject constructor(
         token: String,
         genres: String,
     ) = withContext(Dispatchers.IO) {
-        service.getRecommendationTracks(
+        service.getPopularTracks(
             authorization = token,
             countryCode = DEFAULT_COUNTRY_CODE,
             genres = genres,

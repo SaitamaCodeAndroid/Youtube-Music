@@ -21,8 +21,6 @@ android {
         properties.load(project.rootProject.file("local.properties").inputStream())
         buildConfigField("String", "CLIENT_ID", properties.getProperty("CLIENT_ID"))
         buildConfigField("String", "CLIENT_SECRET", properties.getProperty("CLIENT_SECRET"))
-        buildConfigField("String", "AUTHENTICATION_URL", "\"https://accounts.spotify.com/\"")
-        buildConfigField("String", "BASE_URL", "\"https://api.spotify.com/\"")
     }
 
     buildFeatures {
@@ -51,6 +49,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:model"))
     implementation(project(":core:common"))
+    implementation(project(":core:network"))
 
     // Hilt
     // https://developer.android.com/jetpack/androidx/releases/hilt?hl=vi

@@ -9,6 +9,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -18,20 +19,13 @@ private const val POPULAR_TRACKS_LIMIT = 40
 
 interface MusicService {
 
-    @FormUrlEncoded
-    @POST("api/token")
-    suspend fun getAccessToken(
-        @Header("Authorization") authorization: String,
-        @Field("grant_type") grantType: String = "client_credentials"
-    ): AccessTokenResponse
-
     /**
      * Get recommendations tracks
      */
     @GET("${API_VERSION}/recommendations")
     suspend fun getRecommendationTracks(
-        @Query("limit") limit: Int = RECOMMEND_TRACKS_LIMIT,
         @Header("Authorization") authorization: String,
+        @Query("limit") limit: Int = RECOMMEND_TRACKS_LIMIT,
         @Query("market") countryCode: String,
         @Query("seed_genres") genres: String,
     ): RecommendationTrackResponse
@@ -41,9 +35,9 @@ interface MusicService {
      */
     @GET("${API_VERSION}/recommendations")
     suspend fun getPopularTracks(
+        @Header("Authorization") authorization: String,
         @Query("limit") limit: Int = POPULAR_TRACKS_LIMIT,
         @Query("target_popularity") popularity: Int = 100,
-        @Header("Authorization") authorization: String,
         @Query("market") countryCode: String,
         @Query("seed_genres") genres: String,
     ): RecommendationTrackResponse
