@@ -47,15 +47,12 @@ fun MusicTopAppBar(
                     contentDescription = "app logo",
                 )
 
-                Spacer(modifier = Modifier.width(5.dp))
-
                 Text(
+                    modifier = Modifier.padding(6.dp),
                     text = stringResource(id = R.string.app_bar_title),
                     color = Color.White,
                     fontSize = 30.sp,
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold
-                    )
+                    fontWeight = FontWeight.Bold,
                 )
             }
         },
