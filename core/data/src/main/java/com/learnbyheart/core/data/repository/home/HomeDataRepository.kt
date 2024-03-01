@@ -8,23 +8,15 @@ import kotlinx.coroutines.flow.Flow
 
 interface HomeDataRepository {
 
-    suspend fun getRecommendationTracks(
-        token: String,
-    ): Flow<RecommendationTrackResponse>
+    suspend fun getRecommendationTracks(token: String): Flow<RecommendationTrackResponse>
 
-    suspend fun getPopularTracks(
-        token: String,
-    ): Flow<RecommendationTrackResponse>
+    suspend fun getPopularTracks(token: String): Flow<RecommendationTrackResponse>
 
-    suspend fun getCategories(
-        token: String,
-    ): Flow<CategoryResponse>
+    suspend fun getCategories(token: String): Flow<CategoryResponse>
 
-    suspend fun getNewReleaseAlbums(
-        token: String,
-    ): Flow<AlbumResponse>
+    suspend fun getNewReleaseAlbums(token: String,): Flow<AlbumResponse>
 
-    suspend fun getFeaturedPlaylist(
-        token: String,
-    ): Flow<PlayListResponse>
+    suspend fun getFeaturedPlaylist(token: String): Flow<PlayListResponse>
+
+    suspend fun getNewReleasePlaylist(token: String): Flow<PlayListResponse>
 }

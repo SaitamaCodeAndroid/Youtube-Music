@@ -57,17 +57,27 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
-    implementation(platform("androidx.compose:compose-bom:2024.02.00"))
+    implementation(platform("androidx.compose:compose-bom:2024.02.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
 
+    // Lifecycle aware
+    // https://developer.android.com/jetpack/androidx/releases/lifecycle
+    val lifecycleVersion = "2.7.0"
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycleVersion")
+    
     // Hilt
     // https://developer.android.com/jetpack/androidx/releases/hilt?hl=vi
     val hiltVersion = "2.50"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
+
+    // Navigation with hilt
+    // https://developer.android.com/jetpack/androidx/releases/hilt
+    val hiltComposeVersion = "1.2.0"
+    implementation("androidx.hilt:hilt-navigation-compose:$hiltComposeVersion")
 
     // Navigation Component
     // https://developer.android.com/jetpack/androidx/releases/navigation

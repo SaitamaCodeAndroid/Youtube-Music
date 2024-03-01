@@ -58,4 +58,15 @@ class HomeDataRepositoryImpl @Inject constructor(
         )
         emit(response)
     }
+
+    override suspend fun getNewReleasePlaylist(
+        token: String,
+    ) = flow {
+        val response = dataSource.getPlaylistsByCategory(
+            token = token,
+            category = "new-releases"
+        )
+        emit(response)
+    }
+
 }

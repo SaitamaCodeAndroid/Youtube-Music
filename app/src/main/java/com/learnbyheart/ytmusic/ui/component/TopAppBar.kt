@@ -2,10 +2,8 @@ package com.learnbyheart.ytmusic.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -13,6 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,6 +28,7 @@ import com.learnbyheart.spotify.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MusicTopAppBar(
+    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(),
     onSearchClick: () -> Unit,
 ) {
     TopAppBar(
@@ -47,15 +46,12 @@ fun MusicTopAppBar(
                     contentDescription = "app logo",
                 )
 
-                Spacer(modifier = Modifier.width(5.dp))
-
                 Text(
+                    modifier = Modifier.padding(6.dp),
                     text = stringResource(id = R.string.app_bar_title),
                     color = Color.White,
                     fontSize = 30.sp,
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold
-                    )
+                    fontWeight = FontWeight.Bold,
                 )
             }
         },
@@ -80,14 +76,15 @@ fun MusicTopAppBar(
                 )
             }
         },
-        scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        scrollBehavior = scrollBehavior
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun MusicTopAppBarPreview() {
     Surface(color = Color.Black) {
-        MusicTopAppBar {}
+        MusicTopAppBar{}
     }
 }

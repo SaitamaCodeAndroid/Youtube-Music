@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">YTMusic</string>
     <string name="app_bar_title">Music</string>
+    <string name="no_network_connection">No network connection</string>
 </resources>
