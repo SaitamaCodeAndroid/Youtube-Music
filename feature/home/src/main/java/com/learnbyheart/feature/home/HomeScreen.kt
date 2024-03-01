@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,14 +36,15 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.learnbyheart.core.common.Result
-import com.learnbyheart.core.common.ui.Black292929
+import com.learnbyheart.core.ui.Black292929
 import com.learnbyheart.core.data.HomeDataType
 import com.learnbyheart.core.data.model.HomeDataUiState
 import com.learnbyheart.core.data.model.HomeDisplayData
 import com.learnbyheart.core.model.Category
+import com.learnbyheart.core.ui.LoadingProgress
 import com.learnbyheart.feature.home.component.HomeHeader
-import com.learnbyheart.feature.home.component.LoadingProgress
-import com.learnbyheart.feature.home.component.TrackItem
+import com.learnbyheart.feature.home.component.HorizontalTypeItem
+import com.learnbyheart.feature.home.component.VerticalTypeItem
 
 const val HOME_ROUTE = "home_route"
 private const val HORIZONTAL_GRID_COUNTS = 4
@@ -68,40 +70,6 @@ fun HomeScreen(viewModel: HomeViewModel) {
         HomeUiLayout(homeDataUiState = homeDataUiState)
 
         CategorySection(categoryState = categoryUiState)
-    }
-}
-
-@Composable
-fun HomeUiLayout(
-    homeDataUiState: Result<List<HomeDataUiState>>,
-) {
-
-    val scrollState = rememberScrollState()
-
-    when (homeDataUiState) {
-        is Result.Loading -> LoadingProgress()
-        is Result.Error -> Unit
-        is Result.Success -> {
-            Column(
-                modifier = Modifier
-                    .verticalScroll(scrollState)
-                    .fillMaxSize()
-                    .padding(top = 70.dp)
-            ) {
-                homeDataUiState.data.forEach { homeData ->
-                    when (homeData.musicType) {
-                        HomeDataType.RECOMMENDATION_TRACK ->
-                            RecommendationTrackSection(
-                                title = homeData.musicType.header,
-                                actionText = stringResource(id = R.string.home_header_button_play_all),
-                                homeData.items
-                            )
-
-                        else -> Unit
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -160,9 +128,82 @@ fun CategorySection(
 }
 
 @Composable
-private fun RecommendationTrackSection(
+fun HomeUiLayout(
+    homeDataUiState: Result<List<HomeDataUiState>>,
+) {
+
+    val scrollState = rememberScrollState()
+
+    when (homeDataUiState) {
+        is Result.Loading -> LoadingProgress()
+        is Result.Error -> Unit
+        is Result.Success -> {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(scrollState)
+                    .fillMaxSize()
+                    .padding(vertical = 70.dp)
+            ) {
+                homeDataUiState.data.forEach { homeData ->
+                    when (homeData.musicType) {
+                        HomeDataType.RECOMMENDATION_TRACK, HomeDataType.POPULAR_TRACK ->
+                            SingleSongTypeSection(
+                                title = homeData.musicType.header,
+                                actionButtonText = stringResource(id = R.string.home_header_button_play_all),
+                                homeData.items
+                            )
+
+                        else -> PlaylistTypeSection(
+                            title = homeData.musicType.header,
+                            actionButtonText = stringResource(id = R.string.home_header_button_show_more),
+                            homeData.items
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun PlaylistTypeSection(
     title: String,
-    actionText: String,
+    actionButtonText: String,
+    items: List<HomeDisplayData>
+) {
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 32.dp)
+    ) {
+
+        HomeHeader(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            title = title,
+            actionButtonText = actionButtonText
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+                .horizontalScroll(rememberScrollState())
+        ) {
+
+            items.forEach { playlist ->
+                VerticalTypeItem(item = playlist)
+            }
+        }
+    }
+}
+
+@Composable
+private fun SingleSongTypeSection(
+    title: String,
+    actionButtonText: String,
     tracks: List<HomeDisplayData>
 ) {
 
@@ -177,23 +218,25 @@ private fun RecommendationTrackSection(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             title = title,
-            actionButtonText = actionText
+            actionButtonText = actionButtonText
         )
 
         LazyHorizontalGrid(
             modifier = Modifier
-                .height(400.dp)
-                .padding(top = 24.dp),
+                .padding(top = 16.dp)
+                .height(300.dp)
+                .fillMaxWidth()
+                ,
+            contentPadding = PaddingValues(horizontal = 8.dp),
             rows = GridCells.Fixed(HORIZONTAL_GRID_COUNTS)
         ) {
 
             items(tracks) { track ->
-                TrackItem(track = track)
+                HorizontalTypeItem(item = track)
             }
         }
     }
 }
-
 
 @Preview
 @Composable

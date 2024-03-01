@@ -1,4 +1,4 @@
-package com.learnbyheart.core.common.ui
+package com.learnbyheart.core.ui
 
 import androidx.compose.ui.graphics.Color
 

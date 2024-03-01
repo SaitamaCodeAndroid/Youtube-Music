@@ -18,8 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.learnbyheart.core.common.ui.Black1A1A1A
-import com.learnbyheart.core.common.ui.Black292929
+import com.learnbyheart.core.ui.Black1A1A1A
+import com.learnbyheart.core.ui.Black292929
 
 @Composable
 fun HomeHeader(
@@ -38,7 +38,7 @@ fun HomeHeader(
             text = title,
             color = Color.White,
             style = TextStyle(
-                fontSize = 21.sp,
+                fontSize = 23.sp,
                 fontWeight = FontWeight.Bold
             )
         )
@@ -54,10 +54,7 @@ fun HomeHeader(
                 shape = RoundedCornerShape(16.dp),
                 color = Black1A1A1A
             )
-            .padding(
-                vertical = 4.dp,
-                horizontal = 8.dp
-            )
+            .padding(horizontal = 6.dp)
         ) {
 
             Text(

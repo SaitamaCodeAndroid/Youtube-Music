@@ -60,4 +60,14 @@ class MusicDataSource @Inject constructor(
             locale = DEFAULT_LOCALE,
         )
     }
+
+    suspend fun getPlaylistsByCategory(
+        token: String,
+        category: String,
+    ) = withContext(Dispatchers.IO) {
+        service.getPlaylistsByCategory(
+            authorization = token,
+            category = category,
+        )
+    }
 }

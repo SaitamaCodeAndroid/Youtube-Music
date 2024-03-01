@@ -4,18 +4,12 @@ import com.learnbyheart.core.network.model.AlbumResponse
 import com.learnbyheart.core.network.model.CategoryResponse
 import com.learnbyheart.core.network.model.PlayListResponse
 import com.learnbyheart.core.network.model.RecommendationTrackResponse
-import com.learnbyheart.core.network.token.AccessTokenResponse
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 private const val API_VERSION = "v1"
-private const val RECOMMEND_TRACKS_LIMIT = 20
-private const val POPULAR_TRACKS_LIMIT = 40
 
 interface MusicService {
 
@@ -25,7 +19,7 @@ interface MusicService {
     @GET("${API_VERSION}/recommendations")
     suspend fun getRecommendationTracks(
         @Header("Authorization") authorization: String,
-        @Query("limit") limit: Int = RECOMMEND_TRACKS_LIMIT,
+        @Query("limit") limit: Int = 20,
         @Query("market") countryCode: String,
         @Query("seed_genres") genres: String,
     ): RecommendationTrackResponse
@@ -36,7 +30,7 @@ interface MusicService {
     @GET("${API_VERSION}/recommendations")
     suspend fun getPopularTracks(
         @Header("Authorization") authorization: String,
-        @Query("limit") limit: Int = POPULAR_TRACKS_LIMIT,
+        @Query("limit") limit: Int = 40,
         @Query("target_popularity") popularity: Int = 100,
         @Query("market") countryCode: String,
         @Query("seed_genres") genres: String,
@@ -67,6 +61,16 @@ interface MusicService {
     suspend fun getFeaturedPlaylist(
         @Header("Authorization") authorization: String,
         @Query("locale") locale: String,
+    ): PlayListResponse
+
+    /**
+     * Get a category's playlist
+     */
+    @GET("${API_VERSION}/browse/categories/{category_id}/playlists")
+    suspend fun getPlaylistsByCategory(
+        @Header("Authorization") authorization: String,
+        @Path("category_id") category: String,
+        @Query("limit") limit: Int = 10,
     ): PlayListResponse
 
 }

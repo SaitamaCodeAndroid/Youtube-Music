@@ -47,6 +47,10 @@ class NetworkMonitorImpl @Inject constructor(
          */
         channel.trySend(networkManager.isNetworkConnected())
 
+
+        /**
+         * Release network.
+         */
         awaitClose {
             networkManager.unregisterNetworkCallback(callback)
         }
