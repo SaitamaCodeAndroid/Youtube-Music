@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -91,6 +92,7 @@ internal fun HorizontalTypeItem(
             model = item.image,
             contentScale = ContentScale.Crop,
             contentDescription = item.name,
+            placeholder = painterResource(id = com.learnbyheart.core.ui.R.drawable.img_music_thumbnail)
         )
 
         Text(
@@ -150,7 +152,8 @@ internal fun VerticalTypeItem(
                 .clip(RoundedCornerShape(4.dp)),
             model = item.image,
             contentDescription = "",
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            placeholder = painterResource(id = com.learnbyheart.core.ui.R.drawable.img_music_thumbnail)
         )
 
         Text(
@@ -183,7 +186,7 @@ private fun HorizontalTypeItemPreview() {
         item = HomeDisplayData(
             id = "",
             name = "Hot summer",
-            image = "",
+            image = "https://i.scdn.co/image/ab67706f000000022e63cecea090de728740ae76",
             artists = "Calvin Harris"
         )
     )
@@ -196,7 +199,7 @@ private fun VerticalTypeItemPreview() {
         item = HomeDisplayData(
             id = "",
             name = "Hot\nsummer",
-            image = "",
+            image = "https://i.scdn.co/image/ab67706f000000022e63cecea090de728740ae76",
             artists = "Calvin\nHarris"
         )
     )
