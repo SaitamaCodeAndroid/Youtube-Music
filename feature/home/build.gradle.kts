@@ -106,6 +106,6 @@ dependencies {
     // Coil
     // https://coil-kt.github.io/coil/#download
     val coilVersion = "2.6.0"
-    implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation("io.coil-kt:coil-compose:$coilVersion")
 
 }

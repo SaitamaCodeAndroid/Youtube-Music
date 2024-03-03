@@ -39,6 +39,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.learnbyheart.core.nowplaying.nowPlayingScreen
 import com.learnbyheart.feature.home.homeScreen
 import com.learnbyheart.spotify.R
 import com.learnbyheart.ytmusic.ui.component.MusicTopAppBar
@@ -93,6 +94,7 @@ fun AppScreen(
             ) {
 
                 homeScreen()
+                nowPlayingScreen()
             }
         }
     }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="now_playing_behavior_save">Save</string>
+    <string name="now_playing_behavior_share">Share</string>
+    <string name="now_playing_behavior_download">Download</string>
+</resources>

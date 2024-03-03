@@ -59,7 +59,7 @@ fun NavGraphBuilder.homeScreen() {
 }
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel) {
+private fun HomeScreen(viewModel: HomeViewModel) {
     val categoryUiState by viewModel.categoryUiState.collectAsStateWithLifecycle()
     val homeDataUiState by viewModel.homeDataUiState.collectAsStateWithLifecycle()
 
@@ -74,7 +74,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
 }
 
 @Composable
-fun CategorySection(
+private fun CategorySection(
     categoryState: Result<List<Category>>,
     onGenreClick: (String) -> Unit = {},
 ) {
@@ -128,7 +128,7 @@ fun CategorySection(
 }
 
 @Composable
-fun HomeUiLayout(
+private fun HomeUiLayout(
     homeDataUiState: Result<List<HomeDataUiState>>,
 ) {
 
@@ -166,7 +166,7 @@ fun HomeUiLayout(
 }
 
 @Composable
-fun PlaylistTypeSection(
+private fun PlaylistTypeSection(
     title: String,
     actionButtonText: String,
     items: List<HomeDisplayData>
@@ -225,8 +225,7 @@ private fun SingleSongTypeSection(
             modifier = Modifier
                 .padding(top = 16.dp)
                 .height(300.dp)
-                .fillMaxWidth()
-                ,
+                .fillMaxWidth(),
             contentPadding = PaddingValues(horizontal = 8.dp),
             rows = GridCells.Fixed(HORIZONTAL_GRID_COUNTS)
         ) {
@@ -240,7 +239,7 @@ private fun SingleSongTypeSection(
 
 @Preview
 @Composable
-fun CategorySectionPreview() {
+private fun CategorySectionPreview() {
     CategorySection(
         categoryState = Result.Success(
             listOf(
