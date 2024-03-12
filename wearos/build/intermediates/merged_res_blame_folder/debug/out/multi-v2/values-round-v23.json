@@ -1,0 +1,36 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.learnbyheart.wearos-mergeDebugResources-67:/values-round-v23/values-round-v23.xml",
+            "map": [
+                {
+                    "source": "/Users/nguyenhoang/.gradle/caches/transforms-3/df4cc9a29918cdaee885637790f2abc0/transformed/wear-1.3.0/res/values-round-v23/values-round-v23.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "84",
+                        "endOffsets": "135"
+                    }
+                },
+                {
+                    "source": "/Users/nguyenhoang/Development/Android/Compose/Youtube-Music/wearos/src/main/res/values-round/strings.xml",
+                    "from": {
+                        "startLines": "1",
+                        "startColumns": "4",
+                        "startOffsets": "16",
+                        "endColumns": "75",
+                        "endOffsets": "87"
+                    },
+                    "to": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "140",
+                        "endColumns": "75",
+                        "endOffsets": "211"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.learnbyheart.wearos-mergeDebugResources-67:/values-night-v8/values-night-v8.xml",
+            "map": [
+                {
+                    "source": "/Users/nguyenhoang/.gradle/caches/transforms-3/65fd7229fbd751d54cd047c6a23d1af3/transformed/core-splashscreen-1.1.0-alpha02/res/values-night-v8/values-night-v8.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "85",
+                        "endOffsets": "136"
+                    }
+                }
+            ]
+        }
+    ]
+}

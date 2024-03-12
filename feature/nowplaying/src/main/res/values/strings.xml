@@ -3,4 +3,6 @@
     <string name="now_playing_behavior_save">Save</string>
     <string name="now_playing_behavior_share">Share</string>
     <string name="now_playing_behavior_download">Download</string>
+
+    <string name="notification_channel_name">Media player</string>
 </resources>

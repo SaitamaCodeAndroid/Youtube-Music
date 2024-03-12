@@ -22,10 +22,10 @@ enum class TopLevelDestination(
         filledIconResource = R.drawable.ic_filled_home,
     ),
 
-    /*Search(
+    Search(
         route = "search_route",
         label = "Search",
         outlineIconResource = R.drawable.ic_search,
         filledIconResource = R.drawable.ic_search,
-    )*/
+    )
 }

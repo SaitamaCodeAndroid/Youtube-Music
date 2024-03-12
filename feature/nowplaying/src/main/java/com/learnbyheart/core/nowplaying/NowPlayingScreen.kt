@@ -1,5 +1,7 @@
 package com.learnbyheart.core.nowplaying
 
+import android.content.ComponentName
+import androidx.annotation.OptIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -7,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,35 +29,56 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.media3.common.AudioAttributes
+import androidx.media3.common.C.AUDIO_CONTENT_TYPE_MUSIC
+import androidx.media3.common.MediaItem
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.session.MediaController
+import androidx.media3.session.SessionToken
+import androidx.media3.ui.PlayerControlView
+import androidx.media3.ui.PlayerView
+import com.google.common.util.concurrent.ListenableFuture
+import com.google.common.util.concurrent.MoreExecutors
 import com.learnbyheart.core.model.Album
 import com.learnbyheart.core.model.Image
 import com.learnbyheart.core.model.Track
+import com.learnbyheart.core.nowplaying.service.PlaybackService
 import com.learnbyheart.core.ui.Grey808080
 import com.learnbyheart.core.ui.Grey898989
 
+@OptIn(UnstableApi::class)
 @Composable
-private fun NowPlayingScreen() {
+fun NowPlayingScreen(
+    /*exoPlayer: ExoPlayer? = null,
+    mediaItemIndex: Int = 0,
+    playWhenReady: Boolean = true,
+    playbackPosition: Long = 0,*/
+) {
     val data = Track(
         id = "",
-        name = "Who I am",
-        musicUrl = "",
+        name = "Where Are Ü Now",
         album = Album(
             id = "",
             name = "asdsad",
@@ -63,8 +87,35 @@ private fun NowPlayingScreen() {
             totalTracks = 1,
             type = ""
         ),
+        musicUrl = "https://p.scdn.co/mp3-preview/baf97fea2e3e1c97092ac69426691b703d20d0e2?cid=5782832bc0c14ac5a4b74b7aff9a8307",
+        image = "https://i.scdn.co/image/ab67616d0000b27357fc4730e06c9ab20c1e073b",
         artists = emptyList(),
+        artist = "Justin Bieber"
     )
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+
+    var playWhenReady = true
+    var mediaItemIndex = 0
+    var playbackPosition = 0L
+
+    var controllerFuture: ListenableFuture<MediaController>? = null
+    var lifecycleEvent by remember {
+        mutableStateOf(Lifecycle.Event.ON_ANY)
+    }
+
+    DisposableEffect(key1 = lifecycleOwner) {
+        val lifecycleObserver = LifecycleEventObserver { _, event ->
+            lifecycleEvent = event
+        }
+
+        lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -135,7 +186,7 @@ private fun NowPlayingScreen() {
             }
         }
 
-        AsyncImage(
+        /*AsyncImage(
             modifier = Modifier
                 .padding(
                     top = 32.dp,
@@ -144,10 +195,60 @@ private fun NowPlayingScreen() {
                 )
                 .size(320.dp)
                 .clip(RoundedCornerShape(16.dp)),
-            model = data.album.images[0],
+            model = data.image,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             placeholder = painterResource(id = com.learnbyheart.core.ui.R.drawable.img_music_thumbnail)
+        )*/
+
+        AndroidView(
+            factory = { context ->
+                val sessionToken = SessionToken(
+                    context,
+                    ComponentName(context, PlaybackService::class.java)
+                )
+                controllerFuture = MediaController.Builder(context, sessionToken).buildAsync()
+                PlayerView(context).also { playerView ->
+                    playerView.useController = false
+                    controllerFuture?.addListener({
+                        playerView.player = controllerFuture!!.get().also { controller ->
+                            controller.setMediaItems(
+                                listOf(MediaItem.fromUri(data.musicUrl)),
+                                mediaItemIndex,
+                                playbackPosition
+                            )
+                            controller.setAudioAttributes(
+                                AudioAttributes
+                                    .Builder()
+                                    .setContentType(AUDIO_CONTENT_TYPE_MUSIC)
+                                    .build(),
+                                true
+                            )
+                            controller.playWhenReady = playWhenReady
+                            controller.prepare()
+                        }
+                    }, MoreExecutors.directExecutor())
+                }
+            },
+            update = { playerView ->
+                when (lifecycleEvent) {
+                    Lifecycle.Event.ON_START -> {
+
+                    }
+
+                    Lifecycle.Event.ON_STOP -> {
+                        controllerFuture?.let { MediaController.releaseFuture(it) }
+                        playerView.player?.release()
+                    }
+
+                    else -> {
+                        /** Do nothing */
+                    }
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(16 / 9f)
         )
 
         Text(
