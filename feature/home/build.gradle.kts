@@ -48,7 +48,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
 
-    implementation(platform("androidx.compose:compose-bom:2024.02.01"))
+    implementation(platform("androidx.compose:compose-bom:2024.02.02"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -56,7 +56,7 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.02.01"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.02.02"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
@@ -68,7 +68,7 @@ dependencies {
 
     // Pull to refresh
     // https://developer.android.com/jetpack/androidx/releases/compose-material
-    implementation("androidx.compose.material:material:1.6.2")
+    implementation("androidx.compose.material:material:1.6.3")
 
     // Lifecycle aware
     // https://developer.android.com/jetpack/androidx/releases/lifecycle
@@ -91,12 +91,6 @@ dependencies {
     // https://developer.android.com/jetpack/androidx/releases/media3?hl=vi
     val media3Version = "1.2.1"
     implementation("androidx.media3:media3-exoplayer:$media3Version")
-
-    // Paging
-    // https://developer.android.com/jetpack/androidx/releases/paging
-    // Jetpack Compose integration
-    val pagingVersion = "3.3.0-alpha03"
-    implementation("androidx.paging:paging-compose:$pagingVersion")
 
     // Navigation with hilt
     // https://developer.android.com/jetpack/androidx/releases/hilt

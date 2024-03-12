@@ -54,6 +54,7 @@ android {
 dependencies {
     implementation(project(":feature:home"))
     implementation(project(":feature:nowplaying"))
+    implementation(project(":feature:search"))
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
@@ -63,6 +64,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.media3:media3-exoplayer:1.2.1")
 
     // Lifecycle aware
     // https://developer.android.com/jetpack/androidx/releases/lifecycle

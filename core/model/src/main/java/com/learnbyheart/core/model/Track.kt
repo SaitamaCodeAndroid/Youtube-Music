@@ -9,4 +9,6 @@ data class Track(
     val musicUrl: String,
     val album: Album,
     val artists: List<Artist>,
+    val image: String = "",
+    val artist: String = ""
 )

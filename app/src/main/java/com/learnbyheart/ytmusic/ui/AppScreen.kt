@@ -2,6 +2,7 @@ package com.learnbyheart.ytmusic.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -36,11 +37,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.learnbyheart.core.nowplaying.nowPlayingScreen
 import com.learnbyheart.feature.home.homeScreen
+import com.learnbyheart.feature.search.searchScreen
 import com.learnbyheart.spotify.R
 import com.learnbyheart.ytmusic.ui.component.MusicTopAppBar
 import com.learnbyheart.ytmusic.ui.navigation.TopLevelDestination
@@ -52,6 +52,7 @@ fun AppScreen(
     appState: AppState = rememberAppState(),
     viewModel: AppViewModel = hiltViewModel()
 ) {
+
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
@@ -64,13 +65,13 @@ fun AppScreen(
         },
         bottomBar = {
             BottomBar(
-                navController = navController,
-                appState = appState,
+                topLevelDestinations = appState.topLevelDestinations,
+                onClicked = { appState.navigateToTopLevelDestination(it) }
             )
         }
     ) { paddingValue ->
 
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValue)
@@ -90,11 +91,11 @@ fun AppScreen(
 
             NavHost(
                 navController = navController,
-                startDestination = TopLevelDestination.Home.route,
+                startDestination = TopLevelDestination.Search.route,
             ) {
 
                 homeScreen()
-                nowPlayingScreen()
+                searchScreen()
             }
         }
     }
@@ -102,8 +103,8 @@ fun AppScreen(
 
 @Composable
 fun BottomBar(
-    navController: NavHostController = rememberNavController(),
-    appState: AppState = rememberAppState(),
+    topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.entries,
+    onClicked: (TopLevelDestination) -> Unit = {},
 ) {
 
     var selectedIndex by remember {
@@ -113,12 +114,12 @@ fun BottomBar(
     NavigationBar(
         containerColor = Grey808080
     ) {
-        appState.topLevelDestinations.forEachIndexed { index, screen ->
+        topLevelDestinations.forEachIndexed { index, screen ->
             NavigationBarItem(
                 selected = selectedIndex == index,
                 onClick = {
                     selectedIndex = index
-                    navController.navigate(screen.route)
+                    onClicked(screen)
                 },
                 icon = {
                     if (selectedIndex == index) {

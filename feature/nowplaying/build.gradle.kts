@@ -45,6 +45,9 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:ui"))
 
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.11.0")
     implementation(platform("androidx.compose:compose-bom:2024.02.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -57,6 +60,11 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Constraint layout view
+    // https://developer.android.com/jetpack/androidx/releases/constraintlayout
+    val constraintVersion = "2.1.4"
+    implementation("androidx.constraintlayout:constraintlayout:$constraintVersion")
 
     // Navigation with hilt
     // https://developer.android.com/jetpack/androidx/releases/hilt
@@ -87,6 +95,10 @@ dependencies {
 
     // Media3
     // https://developer.android.com/jetpack/androidx/releases/media3?hl=vi
-    val media3Version = "1.2.1"
+    val media3Version = "1.3.0"
     implementation("androidx.media3:media3-exoplayer:$media3Version")
+    implementation("androidx.media3:media3-ui:$media3Version")
+    implementation("androidx.media3:media3-common:$media3Version")
+    implementation("androidx.media3:media3-exoplayer-dash:$media3Version")
+    implementation("androidx.media3:media3-session:$media3Version")
 }
