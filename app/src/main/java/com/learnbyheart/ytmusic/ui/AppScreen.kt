@@ -40,6 +40,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.learnbyheart.feature.home.homeScreen
+import com.learnbyheart.feature.search.SEARCH_ROUTE
+import com.learnbyheart.feature.search.navigateToSearch
 import com.learnbyheart.feature.search.searchScreen
 import com.learnbyheart.spotify.R
 import com.learnbyheart.ytmusic.ui.component.MusicTopAppBar
@@ -61,7 +63,9 @@ fun AppScreen(
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
         topBar = {
-            MusicTopAppBar(scrollBehavior) {}
+            if (appState.isTopLevelDestination) {
+                MusicTopAppBar { navController.navigateToSearch() }
+            }
         },
         bottomBar = {
             BottomBar(
@@ -91,11 +95,13 @@ fun AppScreen(
 
             NavHost(
                 navController = navController,
-                startDestination = TopLevelDestination.Search.route,
+                startDestination = SEARCH_ROUTE,
             ) {
 
                 homeScreen()
-                searchScreen()
+                searchScreen(
+                    onBackClick = navController::popBackStack
+                )
             }
         }
     }

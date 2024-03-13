@@ -10,8 +10,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
+import com.learnbyheart.feature.home.HOME_ROUTE
 import com.learnbyheart.feature.home.navigateToHome
-import com.learnbyheart.feature.search.navigateToSearch
 import com.learnbyheart.ytmusic.ui.navigation.TopLevelDestination
 import kotlinx.coroutines.CoroutineScope
 
@@ -32,15 +32,19 @@ class AppState(
 
     val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.entries
 
-    val currentDestination: NavDestination?
+    private val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
-            com.learnbyheart.feature.home.HOME_ROUTE -> TopLevelDestination.Home
-            TopLevelDestination.Search.route -> TopLevelDestination.Search
+            HOME_ROUTE -> TopLevelDestination.Home
             else -> null
         }
+
+    val isTopLevelDestination: Boolean
+        @Composable get() = topLevelDestinations.map {
+            it.route
+        }.contains(currentDestination?.route)
 
     /**
      * UI logic for navigating to a top level destination in the app. Top level destinations have
@@ -52,7 +56,7 @@ class AppState(
     fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
         trace("Navigation: ${topLevelDestination.name}") {
             val topLevelNavOptions = navOptions {
-                popUpTo(navController.graph.findStartDestination().id) {
+                popUpTo(navController.graph.startDestinationId) {
                     saveState = true
                 }
                 launchSingleTop = true
@@ -61,7 +65,6 @@ class AppState(
 
             when (topLevelDestination) {
                 TopLevelDestination.Home -> navController.navigateToHome(topLevelNavOptions)
-                TopLevelDestination.Search -> navController.navigateToSearch(topLevelNavOptions)
             }
         }
     }

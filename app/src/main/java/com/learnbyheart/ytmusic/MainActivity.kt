@@ -25,8 +25,9 @@ class MainActivity : ComponentActivity() {
         )
 
         setContent {
-            SpotifyTheme {
-                // A surface container using the 'background' color from the theme
+            SpotifyTheme(
+                darkTheme = true
+            ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
