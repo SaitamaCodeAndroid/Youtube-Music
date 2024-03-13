@@ -4,6 +4,7 @@ import com.learnbyheart.core.network.model.AlbumResponse
 import com.learnbyheart.core.network.model.CategoryResponse
 import com.learnbyheart.core.network.model.PlayListResponse
 import com.learnbyheart.core.network.model.RecommendationTrackResponse
+import com.learnbyheart.core.network.model.SearchResponse
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
@@ -72,5 +73,17 @@ interface MusicService {
         @Path("category_id") category: String,
         @Query("limit") limit: Int = 10,
     ): PlayListResponse
+
+    /**
+     * Search for track, playlist, artist and album
+     */
+    @GET("$API_VERSION/search")
+    suspend fun search(
+        @Header("Authorization") authorization: String,
+        @Path("q") query: String,
+        @Query("type") type: String,
+        @Query("market") locale: String,
+        @Query("limit") limit: Int = 12,
+    ): SearchResponse
 
 }

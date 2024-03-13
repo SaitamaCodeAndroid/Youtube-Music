@@ -39,6 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.learnbyheart.feature.home.HOME_ROUTE
 import com.learnbyheart.feature.home.homeScreen
 import com.learnbyheart.feature.search.SEARCH_ROUTE
 import com.learnbyheart.feature.search.navigateToSearch
@@ -51,11 +52,13 @@ import com.learnbyheart.ytmusic.ui.theme.Grey808080
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppScreen(
-    appState: AppState = rememberAppState(),
     viewModel: AppViewModel = hiltViewModel()
 ) {
 
     val navController = rememberNavController()
+    val appState = rememberAppState(
+        navController = navController
+    )
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -95,7 +98,7 @@ fun AppScreen(
 
             NavHost(
                 navController = navController,
-                startDestination = SEARCH_ROUTE,
+                startDestination = HOME_ROUTE,
             ) {
 
                 homeScreen()

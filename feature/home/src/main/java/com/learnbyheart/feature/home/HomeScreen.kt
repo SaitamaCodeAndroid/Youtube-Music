@@ -39,8 +39,8 @@ import com.learnbyheart.core.common.Result
 import com.learnbyheart.core.ui.Black292929
 import com.learnbyheart.core.data.HomeDataType
 import com.learnbyheart.core.data.model.HomeDataUiState
-import com.learnbyheart.core.data.model.HomeDisplayData
 import com.learnbyheart.core.model.Category
+import com.learnbyheart.core.model.MusicDisplayData
 import com.learnbyheart.core.ui.LoadingProgress
 import com.learnbyheart.feature.home.component.HomeHeader
 import com.learnbyheart.feature.home.component.HorizontalTypeItem
@@ -169,7 +169,7 @@ private fun HomeUiLayout(
 private fun PlaylistTypeSection(
     title: String,
     actionButtonText: String,
-    items: List<HomeDisplayData>
+    items: List<MusicDisplayData>
 ) {
 
     Column(
@@ -204,7 +204,7 @@ private fun PlaylistTypeSection(
 private fun SingleSongTypeSection(
     title: String,
     actionButtonText: String,
-    tracks: List<HomeDisplayData>
+    tracks: List<MusicDisplayData>
 ) {
 
     Column(

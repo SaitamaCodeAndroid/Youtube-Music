@@ -40,7 +40,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -57,13 +56,10 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
-import androidx.media3.ui.PlayerControlView
 import androidx.media3.ui.PlayerView
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
-import com.learnbyheart.core.model.Album
-import com.learnbyheart.core.model.Image
-import com.learnbyheart.core.model.Track
+import com.learnbyheart.core.model.TrackDisplayData
 import com.learnbyheart.core.nowplaying.service.PlaybackService
 import com.learnbyheart.core.ui.Grey808080
 import com.learnbyheart.core.ui.Grey898989
@@ -76,25 +72,15 @@ fun NowPlayingScreen(
     playWhenReady: Boolean = true,
     playbackPosition: Long = 0,*/
 ) {
-    val data = Track(
+    val data = TrackDisplayData(
         id = "",
         name = "Where Are Ü Now",
-        album = Album(
-            id = "",
-            name = "asdsad",
-            artists = emptyList(),
-            images = listOf(Image(url = "")),
-            totalTracks = 1,
-            type = ""
-        ),
         musicUrl = "https://p.scdn.co/mp3-preview/baf97fea2e3e1c97092ac69426691b703d20d0e2?cid=5782832bc0c14ac5a4b74b7aff9a8307",
         image = "https://i.scdn.co/image/ab67616d0000b27357fc4730e06c9ab20c1e073b",
-        artists = emptyList(),
-        artist = "Justin Bieber"
+        artists = "Justin Bieber"
     )
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    val context = LocalContext.current
 
     var playWhenReady = true
     var mediaItemIndex = 0

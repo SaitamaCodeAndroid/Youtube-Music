@@ -31,12 +31,12 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
-import com.learnbyheart.core.data.model.HomeDisplayData
+import com.learnbyheart.core.model.MusicDisplayData
 import com.learnbyheart.core.ui.Grey898989
 
 @Composable
 internal fun HorizontalTypeItem(
-    item: HomeDisplayData,
+    item: MusicDisplayData,
 ) {
 
     val constrainSet = ConstraintSet {
@@ -110,7 +110,7 @@ internal fun HorizontalTypeItem(
         Text(
             modifier = Modifier
                 .layoutId("artist"),
-            text = item.artists,
+            text = item.owner,
             color = Grey898989,
             fontSize = 14.sp,
             maxLines = 1,
@@ -134,7 +134,7 @@ internal fun HorizontalTypeItem(
 
 @Composable
 internal fun VerticalTypeItem(
-    item: HomeDisplayData,
+    item: MusicDisplayData,
 ) {
 
     Column(
@@ -167,9 +167,9 @@ internal fun VerticalTypeItem(
             overflow = TextOverflow.Ellipsis
         )
 
-        if (item.artists.isNotEmpty()) {
+        if (item.owner.isNotEmpty()) {
             Text(
-                text = item.artists,
+                text = item.owner,
                 color = Grey898989,
                 fontSize = 14.sp,
                 maxLines = 2,
@@ -183,11 +183,11 @@ internal fun VerticalTypeItem(
 @Composable
 private fun HorizontalTypeItemPreview() {
     HorizontalTypeItem(
-        item = HomeDisplayData(
+        item = MusicDisplayData(
             id = "",
             name = "Hot summer",
             image = "https://i.scdn.co/image/ab67706f000000022e63cecea090de728740ae76",
-            artists = "Calvin Harris"
+            owner = "Calvin Harris"
         )
     )
 }
@@ -196,11 +196,11 @@ private fun HorizontalTypeItemPreview() {
 @Composable
 private fun VerticalTypeItemPreview() {
     VerticalTypeItem(
-        item = HomeDisplayData(
+        item = MusicDisplayData(
             id = "",
             name = "Hot\nsummer",
             image = "https://i.scdn.co/image/ab67706f000000022e63cecea090de728740ae76",
-            artists = "Calvin\nHarris"
+            owner = "Calvin\nHarris"
         )
     )
 }

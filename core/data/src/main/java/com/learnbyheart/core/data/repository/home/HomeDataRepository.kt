@@ -1,5 +1,6 @@
 package com.learnbyheart.core.data.repository.home
 
+import com.learnbyheart.core.model.Category
 import com.learnbyheart.core.network.model.AlbumResponse
 import com.learnbyheart.core.network.model.CategoryResponse
 import com.learnbyheart.core.network.model.PlayListResponse
@@ -12,7 +13,7 @@ interface HomeDataRepository {
 
     suspend fun getPopularTracks(token: String): Flow<RecommendationTrackResponse>
 
-    suspend fun getCategories(token: String): Flow<CategoryResponse>
+    suspend fun getCategories(token: String): Flow<List<Category>>
 
     suspend fun getNewReleaseAlbums(token: String,): Flow<AlbumResponse>
 

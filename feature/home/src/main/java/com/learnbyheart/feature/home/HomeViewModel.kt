@@ -11,6 +11,7 @@ import com.learnbyheart.core.model.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,10 +24,10 @@ class HomeViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _categoryUiState = MutableStateFlow<Result<List<Category>>>(Result.Loading)
-    val categoryUiState: StateFlow<Result<List<Category>>> = _categoryUiState
+    val categoryUiState: StateFlow<Result<List<Category>>> = _categoryUiState.asStateFlow()
 
     private val _homeDataUiState = MutableStateFlow<Result<List<HomeDataUiState>>>(Result.Loading)
-    val homeDataUiState: StateFlow<Result<List<HomeDataUiState>>> = _homeDataUiState
+    val homeDataUiState: StateFlow<Result<List<HomeDataUiState>>> = _homeDataUiState.asStateFlow()
 
     init {
         loadMusicCategories()

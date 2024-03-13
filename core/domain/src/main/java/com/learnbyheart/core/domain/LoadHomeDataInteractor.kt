@@ -2,8 +2,8 @@ package com.learnbyheart.core.domain
 
 import com.learnbyheart.core.data.HomeDataType
 import com.learnbyheart.core.data.model.HomeDataUiState
-import com.learnbyheart.core.data.model.HomeDisplayData
 import com.learnbyheart.core.data.repository.home.HomeDataRepository
+import com.learnbyheart.core.model.MusicDisplayData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -25,40 +25,38 @@ class LoadHomeDataInteractor @Inject constructor(
                 val token = bearerToken.value
 
                 combine(
-                    homeDataRepository.getRecommendationTracks(bearerToken.value),
+                    homeDataRepository.getRecommendationTracks(token),
                     homeDataRepository.getPopularTracks(token),
                     homeDataRepository.getFeaturedPlaylist(token),
                     homeDataRepository.getNewReleaseAlbums(token),
                     homeDataRepository.getNewReleasePlaylist(token)
                 ) { flow1, flow2, flow3, flow4, flow5 ->
 
-                    val recommendedTrackList = mutableListOf<HomeDisplayData>()
-                    val recommendedAlbumList = mutableListOf<HomeDisplayData>()
-                    val popularTrackList = mutableListOf<HomeDisplayData>()
-                    val featuredPlayList = mutableListOf<HomeDisplayData>()
-                    val newReleaseAlbums = mutableListOf<HomeDisplayData>()
-                    val newReleasePlaylist = mutableListOf<HomeDisplayData>()
+                    val recommendedTrackList = mutableListOf<MusicDisplayData>()
+                    val recommendedAlbumList = mutableListOf<MusicDisplayData>()
+                    val popularTrackList = mutableListOf<MusicDisplayData>()
+                    val featuredPlayList = mutableListOf<MusicDisplayData>()
+                    val newReleaseAlbums = mutableListOf<MusicDisplayData>()
+                    val newReleasePlaylist = mutableListOf<MusicDisplayData>()
 
                     flow1.tracks.forEach {
+                        val track = it.toTrackDisplayData()
                         recommendedTrackList.add(
-                            HomeDisplayData(
-                                id = it.id,
-                                name = it.name,
-                                image = it.album.images[0].url,
-                                artists = it.artists.joinToString(" & ") { artist ->
-                                    artist.name
-                                }
+                            MusicDisplayData(
+                                id = track.id,
+                                name = track.name,
+                                image = track.image,
+                                owner = track.artists
                             )
                         )
 
+                        val album = it.album.toAlbumDisplayData()
                         recommendedAlbumList.add(
-                            HomeDisplayData(
-                                id = it.album.id,
-                                name = it.album.name,
-                                image = it.album.images[0].url,
-                                artists = it.artists.joinToString(" & ") { artist ->
-                                    artist.name
-                                }
+                            MusicDisplayData(
+                                id = album.id,
+                                name = album.name,
+                                image = album.image,
+                                owner = album.artists
                             )
                         )
                     }
@@ -77,13 +75,12 @@ class LoadHomeDataInteractor @Inject constructor(
 
                     popularTrackList.addAll(
                         flow2.tracks.map {
-                            HomeDisplayData(
-                                id = it.id,
-                                name = it.name,
-                                image = it.album.images[0].url,
-                                artists = it.artists.joinToString(" & ") { artist ->
-                                    artist.name
-                                }
+                            val track = it.toTrackDisplayData()
+                            MusicDisplayData(
+                                id = track.id,
+                                name = track.name,
+                                image = track.image,
+                                owner = track.artists
                             )
                         }
                     )
@@ -96,10 +93,12 @@ class LoadHomeDataInteractor @Inject constructor(
 
                     newReleasePlaylist.addAll(
                         flow5.playlistMetadata.playLists.map {
-                            HomeDisplayData(
-                                id = it.id,
-                                name = it.name,
-                                image = it.images[0].url,
+                            val playlist = it.toPlaylistDisplayData()
+                            MusicDisplayData(
+                                id = playlist.id,
+                                name = playlist.name,
+                                image = playlist.image,
+                                owner = playlist.owner.name
                             )
                         }
                     )
@@ -112,10 +111,12 @@ class LoadHomeDataInteractor @Inject constructor(
 
                     featuredPlayList.addAll(
                         flow3.playlistMetadata.playLists.map {
-                            HomeDisplayData(
-                                id = it.id,
-                                name = it.name,
-                                image = it.images[0].url,
+                            val playlist = it.toPlaylistDisplayData()
+                            MusicDisplayData(
+                                id = playlist.id,
+                                name = playlist.name,
+                                image = playlist.image,
+                                owner = playlist.owner.name
                             )
                         }
                     )
@@ -128,13 +129,12 @@ class LoadHomeDataInteractor @Inject constructor(
 
                     newReleaseAlbums.addAll(
                         flow4.albumMetadata.albums.map {
-                            HomeDisplayData(
-                                id = it.id,
-                                name = it.name,
-                                image = it.images[0].url,
-                                artists = it.artists.joinToString(" & ") { artist ->
-                                    artist.name
-                                }
+                            val album = it.toAlbumDisplayData()
+                            MusicDisplayData(
+                                id = album.id,
+                                name = album.name,
+                                image = album.image,
+                                owner = album.artists
                             )
                         }
                     )

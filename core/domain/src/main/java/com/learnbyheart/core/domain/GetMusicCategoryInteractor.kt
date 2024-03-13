@@ -1,23 +1,22 @@
 package com.learnbyheart.core.domain
 
-import com.learnbyheart.core.data.datasource.MusicDataSource
+import com.learnbyheart.core.data.repository.home.HomeDataRepositoryImpl
 import com.learnbyheart.core.model.Category
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class GetMusicCategoryInteractor @Inject constructor(
     private val getAccessTokenInteractor: GetAccessTokenInteractor,
-    private val dataSource: MusicDataSource,
+    private val homeDataRepositoryImpl: HomeDataRepositoryImpl,
 ) {
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(): Flow<List<Category>> {
         return getAccessTokenInteractor()
-            .map { token ->
-                dataSource
-                    .getCategories(token = token.value)
-                    .categoryMetadata
-                    .categories
+            .flatMapLatest { token ->
+                homeDataRepositoryImpl.getCategories(token = token.value)
             }
     }
 }
