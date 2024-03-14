@@ -77,7 +77,8 @@ fun NowPlayingScreen(
         name = "Where Are Ü Now",
         musicUrl = "https://p.scdn.co/mp3-preview/baf97fea2e3e1c97092ac69426691b703d20d0e2?cid=5782832bc0c14ac5a4b74b7aff9a8307",
         image = "https://i.scdn.co/image/ab67616d0000b27357fc4730e06c9ab20c1e073b",
-        artists = "Justin Bieber"
+        artists = "Justin Bieber",
+        duration = "a"
     )
 
     val lifecycleOwner = LocalLifecycleOwner.current

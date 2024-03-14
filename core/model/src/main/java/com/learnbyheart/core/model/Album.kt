@@ -1,6 +1,7 @@
 package com.learnbyheart.core.model
 
 import com.google.gson.annotations.SerializedName
+import kotlin.String
 
 enum class AlbumType(val typeName: String) {
     ALBUM("album"),

@@ -4,24 +4,29 @@ import com.learnbyheart.core.data.repository.search.SearchRepository
 import com.learnbyheart.core.model.MusicDisplayData
 import com.learnbyheart.core.network.model.SearchType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+private const val SEARCH_DEBOUNCE_TIME = 200L
+
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class SearchInteractor @Inject constructor(
     private val getAccessTokenInteractor: GetAccessTokenInteractor,
     private val searchRepository: SearchRepository
 ) {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(searchQuery: String, typeName: String): Flow<List<SearchDisplayData>> {
+    operator fun invoke(searchQuery: String, searchType: String): Flow<List<SearchDisplayData>> {
         return getAccessTokenInteractor().flatMapLatest { bearerToken ->
             searchRepository.search(
                 token = bearerToken.value,
                 query = searchQuery,
-                type = typeName
-            ).map { searchResult ->
+                type = searchType
+            ).debounce(SEARCH_DEBOUNCE_TIME)
+                .map { searchResult ->
                 val searchDataList = mutableListOf<SearchDisplayData>()
                 searchResult.apply {
                     searchDataList.add(

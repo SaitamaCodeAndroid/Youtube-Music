@@ -1,6 +1,7 @@
 package com.learnbyheart.core.model
 
 import java.util.Calendar
+import kotlin.String
 
 data class BearerToken(
     val bearerToken: String,

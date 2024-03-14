@@ -1,6 +1,7 @@
 package com.learnbyheart.core.model
 
 import com.google.gson.annotations.SerializedName
+import kotlin.String
 
 data class Playlist(
     val id: String,
@@ -10,6 +11,7 @@ data class Playlist(
     @SerializedName("primary_color")
     val primaryColor: String?,
     val owner: Owner,
+    val tracks: AdditionalInfo
 ) {
 
     fun toPlaylistDisplayData() = PlaylistDisplayData(
@@ -18,7 +20,8 @@ data class Playlist(
         description = description,
         image = images[0].url,
         primaryColor = primaryColor ?: "#000000",
-        owner = owner
+        owner = owner,
+        totalTrack = tracks.total,
     )
 }
 
@@ -29,4 +32,5 @@ data class PlaylistDisplayData(
     val image: String,
     val primaryColor: String,
     val owner: Owner,
+    val totalTrack: Int,
 )
