@@ -80,10 +80,11 @@ interface MusicService {
     @GET("$API_VERSION/search")
     suspend fun search(
         @Header("Authorization") authorization: String,
-        @Path("q") query: String,
+        @Query("q") query: String,
         @Query("type") type: String,
-        @Query("market") locale: String,
-        @Query("limit") limit: Int = 12,
+        @Query("market") countryCode: String,
+        @Query("limit") limit: Int = 3,
+        @Query("offset") position: Int = 1
     ): SearchResponse
 
 }

@@ -37,6 +37,7 @@ import com.learnbyheart.core.ui.Grey898989
 @Composable
 internal fun HorizontalTypeItem(
     item: MusicDisplayData,
+    onItemClick: (String) -> Unit = {}
 ) {
 
     val constrainSet = ConstraintSet {
@@ -79,7 +80,7 @@ internal fun HorizontalTypeItem(
             .wrapContentHeight()
             .width(380.dp)
             .clip(RoundedCornerShape(8.dp))
-            .clickable { }
+            .clickable { onItemClick(item.id) }
             .padding(8.dp),
         constraintSet = constrainSet
     ) {

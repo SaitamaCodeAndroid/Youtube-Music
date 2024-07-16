@@ -5,10 +5,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -33,8 +33,8 @@ import com.learnbyheart.core.data.HomeDataType
 import com.learnbyheart.core.data.model.HomeDataUiState
 import com.learnbyheart.core.model.MusicDisplayData
 import com.learnbyheart.core.ui.CategoryItem
+import com.learnbyheart.core.ui.HeaderSection
 import com.learnbyheart.core.ui.LoadingProgress
-import com.learnbyheart.feature.home.component.HomeHeader
 import com.learnbyheart.feature.home.component.HorizontalTypeItem
 import com.learnbyheart.feature.home.component.VerticalTypeItem
 
@@ -43,26 +43,37 @@ private const val HORIZONTAL_GRID_COUNTS = 4
 
 fun NavController.navigateToHome(navOptions: NavOptions) = navigate(HOME_ROUTE, navOptions)
 
-fun NavGraphBuilder.homeScreen() {
+fun NavGraphBuilder.homeScreen(
+    navigateToNowPlaying: (String) -> Unit
+) {
     composable(HOME_ROUTE) {
         val homeViewModel = hiltViewModel<HomeViewModel>()
-        HomeScreen(viewModel = homeViewModel)
+        HomeScreen(
+            viewModel = homeViewModel,
+            navigateToNowPlaying = navigateToNowPlaying
+        )
     }
 }
 
 @Composable
-private fun HomeScreen(viewModel: HomeViewModel) {
+private fun HomeScreen(
+    viewModel: HomeViewModel,
+    navigateToNowPlaying: (String) -> Unit
+) {
     val categoryUiState by viewModel.categoryUiState.collectAsStateWithLifecycle()
     val homeDataUiState by viewModel.homeDataUiState.collectAsStateWithLifecycle()
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.wrapContentSize()
     ) {
 
         when (homeDataUiState) {
             is Result.Loading -> LoadingProgress()
             is Result.Error -> Unit
-            is Result.Success -> HomeLayoutSection((homeDataUiState as Result.Success).data)
+            is Result.Success -> HomeLayoutSection(
+                uiHomeData = (homeDataUiState as Result.Success).data,
+                onItemClick = { navigateToNowPlaying(it) }
+            )
         }
 
         when (categoryUiState) {
@@ -104,15 +115,16 @@ private fun CategorySection(categories: List<String>) {
 
 @Composable
 private fun HomeLayoutSection(
-    uiHomeData: List<HomeDataUiState>
+    uiHomeData: List<HomeDataUiState>,
+    onItemClick: (String) -> Unit
 ) {
 
     val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
+            .wrapContentSize()
             .verticalScroll(scrollState)
-            .fillMaxSize()
             .padding(vertical = 70.dp)
     ) {
         uiHomeData.forEach { homeData ->
@@ -121,7 +133,8 @@ private fun HomeLayoutSection(
                     SingleSongTypeSection(
                         title = homeData.musicType.header,
                         actionButtonText = stringResource(id = R.string.home_header_button_play_all),
-                        homeData.items
+                        homeData.items,
+                        onItemClick = { onItemClick(it) }
                     )
 
                 else -> PlaylistTypeSection(
@@ -147,7 +160,7 @@ private fun PlaylistTypeSection(
             .padding(top = 32.dp)
     ) {
 
-        HomeHeader(
+        HeaderSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -173,7 +186,8 @@ private fun PlaylistTypeSection(
 private fun SingleSongTypeSection(
     title: String,
     actionButtonText: String,
-    tracks: List<MusicDisplayData>
+    tracks: List<MusicDisplayData>,
+    onItemClick: (String) -> Unit
 ) {
 
     Column(
@@ -182,7 +196,7 @@ private fun SingleSongTypeSection(
             .padding(top = 32.dp)
     ) {
 
-        HomeHeader(
+        HeaderSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -200,7 +214,10 @@ private fun SingleSongTypeSection(
         ) {
 
             items(tracks) { track ->
-                HorizontalTypeItem(item = track)
+                HorizontalTypeItem(
+                    item = track,
+                    onItemClick = { onItemClick(it) }
+                )
             }
         }
     }

@@ -3,7 +3,6 @@ package com.learnbyheart.core.model
 import com.google.gson.annotations.SerializedName
 import java.util.Calendar
 import java.util.Date
-import kotlin.String
 
 data class Track(
     val id: String,
@@ -27,6 +26,21 @@ data class Track(
             duration = "${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)}",
             image = album.images[0].url,
             artists = artists.joinToString(" & ") { artist ->
+                artist.name
+            }
+        )
+    }
+
+    fun toMusicDisplayData(): MusicDisplayData {
+        val calendar = Calendar.getInstance()
+        calendar.time = Date(duration)
+
+        return MusicDisplayData(
+            id = id,
+            name = name,
+            duration = "${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)}",
+            image = album.images[0].url,
+            owner = artists.joinToString(" & ") { artist ->
                 artist.name
             }
         )

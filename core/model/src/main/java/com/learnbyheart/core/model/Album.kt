@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName
 import kotlin.String
 
 enum class AlbumType(val typeName: String) {
-    ALBUM("album"),
-    SINGLE("single")
+    ALBUM("Album"),
+    SINGLE("Single")
 }
 
 data class Album(

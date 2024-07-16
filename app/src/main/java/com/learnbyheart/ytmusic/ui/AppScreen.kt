@@ -39,9 +39,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.learnbyheart.core.nowplaying.navigateToNowPlaying
+import com.learnbyheart.core.nowplaying.nowPlayingScreen
 import com.learnbyheart.feature.home.HOME_ROUTE
 import com.learnbyheart.feature.home.homeScreen
-import com.learnbyheart.feature.search.SEARCH_ROUTE
 import com.learnbyheart.feature.search.navigateToSearch
 import com.learnbyheart.feature.search.searchScreen
 import com.learnbyheart.spotify.R
@@ -71,10 +72,12 @@ fun AppScreen(
             }
         },
         bottomBar = {
-            BottomBar(
-                topLevelDestinations = appState.topLevelDestinations,
-                onClicked = { appState.navigateToTopLevelDestination(it) }
-            )
+            if (appState.isTopLevelDestination) {
+                BottomBar(
+                    topLevelDestinations = appState.topLevelDestinations,
+                    onClicked = { appState.navigateToTopLevelDestination(it) }
+                )
+            }
         }
     ) { paddingValue ->
 
@@ -101,7 +104,12 @@ fun AppScreen(
                 startDestination = HOME_ROUTE,
             ) {
 
-                homeScreen()
+                homeScreen(
+                    navigateToNowPlaying = { navController.navigateToNowPlaying(it) }
+                )
+
+                nowPlayingScreen()
+
                 searchScreen(
                     onBackClick = navController::popBackStack
                 )

@@ -1,6 +1,9 @@
 package com.learnbyheart.core.nowplaying.service
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.annotation.OptIn
 import androidx.media3.common.AudioAttributes
@@ -34,9 +37,18 @@ class PlaybackService : MediaSessionService(), MediaSession.Callback {
 
     private var mediaSession: MediaSession? = null
 
+    private lateinit var broadcastReceiver: BroadcastReceiver
+
     @OptIn(UnstableApi::class)
     override fun onCreate() {
         super.onCreate()
+
+        broadcastReceiver = object : BroadcastReceiver(){
+            override fun onReceive(context: Context?, intent: Intent?) {
+                TODO("Not yet implemented")
+            }
+        }
+        registerReceiver(broadcastReceiver, IntentFilter())
 
         val audioAttribute = AudioAttributes
             .Builder()

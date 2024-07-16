@@ -80,7 +80,7 @@ class MusicDataSource @Inject constructor(
             authorization = token,
             query = query,
             type = type,
-            locale = DEFAULT_LOCALE
+            countryCode = DEFAULT_COUNTRY_CODE
         )
     }
 }

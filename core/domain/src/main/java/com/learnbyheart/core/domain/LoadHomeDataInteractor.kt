@@ -46,7 +46,8 @@ class LoadHomeDataInteractor @Inject constructor(
                                 id = track.id,
                                 name = track.name,
                                 image = track.image,
-                                owner = track.artists
+                                owner = track.artists,
+                                duration = track.duration
                             )
                         )
 
@@ -56,7 +57,8 @@ class LoadHomeDataInteractor @Inject constructor(
                                 id = album.id,
                                 name = album.name,
                                 image = album.image,
-                                owner = album.artists
+                                owner = album.artists,
+                                duration = track.duration
                             )
                         )
                     }
@@ -80,7 +82,8 @@ class LoadHomeDataInteractor @Inject constructor(
                                 id = track.id,
                                 name = track.name,
                                 image = track.image,
-                                owner = track.artists
+                                owner = track.artists,
+                                duration = track.duration
                             )
                         }
                     )
@@ -98,7 +101,8 @@ class LoadHomeDataInteractor @Inject constructor(
                                 id = playlist.id,
                                 name = playlist.name,
                                 image = playlist.image,
-                                owner = playlist.owner.name
+                                owner = playlist.owner.name,
+                                totalTrack = playlist.totalTrack
                             )
                         }
                     )
@@ -116,7 +120,8 @@ class LoadHomeDataInteractor @Inject constructor(
                                 id = playlist.id,
                                 name = playlist.name,
                                 image = playlist.image,
-                                owner = playlist.owner.name
+                                owner = playlist.owner.name,
+                                totalTrack = playlist.totalTrack
                             )
                         }
                     )
@@ -134,7 +139,8 @@ class LoadHomeDataInteractor @Inject constructor(
                                 id = album.id,
                                 name = album.name,
                                 image = album.image,
-                                owner = album.artists
+                                owner = album.artists,
+                                albumType = album.type
                             )
                         }
                     )

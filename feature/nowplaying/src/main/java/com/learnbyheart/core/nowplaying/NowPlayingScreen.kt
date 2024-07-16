@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,9 +29,11 @@ import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -40,6 +41,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,16 +50,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C.AUDIO_CONTENT_TYPE_MUSIC
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
+import androidx.media3.common.Player
+import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
-import androidx.media3.ui.PlayerView
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import coil.compose.AsyncImage
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import com.learnbyheart.core.model.TrackDisplayData
@@ -64,9 +72,21 @@ import com.learnbyheart.core.nowplaying.service.PlaybackService
 import com.learnbyheart.core.ui.Grey808080
 import com.learnbyheart.core.ui.Grey898989
 
+const val NOW_PLAYING_ROUTE = "now_playing"
+
+fun NavController.navigateToNowPlaying(songId: String) = navigate("$NOW_PLAYING_ROUTE/{$songId}")
+
+fun NavGraphBuilder.nowPlayingScreen() {
+    composable("$NOW_PLAYING_ROUTE/{songId}") { backStackEntry ->
+        val id = backStackEntry.arguments?.getString("songId")
+        NowPlayingScreen(songId = id)
+    }
+}
+
 @OptIn(UnstableApi::class)
 @Composable
 fun NowPlayingScreen(
+    songId: String?,
     /*exoPlayer: ExoPlayer? = null,
     mediaItemIndex: Int = 0,
     playWhenReady: Boolean = true,
@@ -81,18 +101,27 @@ fun NowPlayingScreen(
         duration = "a"
     )
 
+    val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
     var playWhenReady = true
     var mediaItemIndex = 0
-    var playbackPosition = 0L
+    var playbackPosition by remember { mutableLongStateOf(0) }
+    var controllerFuture: ListenableFuture<MediaController>
+    var mediaController: MediaController? = null
 
-    var controllerFuture: ListenableFuture<MediaController>? = null
     var lifecycleEvent by remember {
-        mutableStateOf(Lifecycle.Event.ON_ANY)
+        mutableStateOf(Lifecycle.Event.ON_CREATE)
     }
 
-    DisposableEffect(key1 = lifecycleOwner) {
+    val playerListener = object : Player.Listener {
+        override fun onEvents(player: Player, events: Player.Events) {
+            super.onEvents(player, events)
+            playbackPosition = player.currentPosition
+        }
+    }
+
+    DisposableEffect(lifecycleOwner) {
         val lifecycleObserver = LifecycleEventObserver { _, event ->
             lifecycleEvent = event
         }
@@ -104,8 +133,48 @@ fun NowPlayingScreen(
         }
     }
 
+    LaunchedEffect(lifecycleEvent) {
+        when (lifecycleEvent) {
+            Lifecycle.Event.ON_START -> {
+                val sessionToken = SessionToken(
+                    context,
+                    ComponentName(context, PlaybackService::class.java)
+                )
+                controllerFuture = MediaController.Builder(context, sessionToken).buildAsync()
+                controllerFuture.addListener({
+                    controllerFuture.get().also { controller ->
+                        mediaController = controller
+                        mediaController?.setMediaItems(
+                            listOf(MediaItem.fromUri(data.musicUrl)),
+                            mediaItemIndex,
+                            playbackPosition
+                        )
+                        controller.setAudioAttributes(
+                            AudioAttributes
+                                .Builder()
+                                .setContentType(AUDIO_CONTENT_TYPE_MUSIC)
+                                .build(),
+                            true
+                        )
+                        controller.addListener(playerListener)
+                        controller.playWhenReady = playWhenReady
+                        controller.prepare()
+                    }
+                }, MoreExecutors.directExecutor())
+            }
+
+            Lifecycle.Event.ON_STOP -> {
+
+            }
+
+            else -> Unit
+        }
+    }
+
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         var tabSelected by remember { mutableIntStateOf(0) }
@@ -115,7 +184,8 @@ fun NowPlayingScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
 
             IconButton(onClick = { }) {
@@ -146,7 +216,7 @@ fun NowPlayingScreen(
                 tabList.forEachIndexed { index, tab ->
                     Tab(
                         modifier = Modifier
-                            .height(40.dp)
+                            .height(30.dp)
                             .clip(RoundedCornerShape(20.dp))
                             .conditional(tabSelected == index) {
                                 background(color = Color.Cyan)
@@ -173,69 +243,19 @@ fun NowPlayingScreen(
             }
         }
 
-        /*AsyncImage(
+        AsyncImage(
             modifier = Modifier
                 .padding(
                     top = 32.dp,
                     start = 24.dp,
                     end = 24.dp
                 )
-                .size(320.dp)
+                .size(300.dp)
                 .clip(RoundedCornerShape(16.dp)),
             model = data.image,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             placeholder = painterResource(id = com.learnbyheart.core.ui.R.drawable.img_music_thumbnail)
-        )*/
-
-        AndroidView(
-            factory = { context ->
-                val sessionToken = SessionToken(
-                    context,
-                    ComponentName(context, PlaybackService::class.java)
-                )
-                controllerFuture = MediaController.Builder(context, sessionToken).buildAsync()
-                PlayerView(context).also { playerView ->
-                    playerView.useController = false
-                    controllerFuture?.addListener({
-                        playerView.player = controllerFuture!!.get().also { controller ->
-                            controller.setMediaItems(
-                                listOf(MediaItem.fromUri(data.musicUrl)),
-                                mediaItemIndex,
-                                playbackPosition
-                            )
-                            controller.setAudioAttributes(
-                                AudioAttributes
-                                    .Builder()
-                                    .setContentType(AUDIO_CONTENT_TYPE_MUSIC)
-                                    .build(),
-                                true
-                            )
-                            controller.playWhenReady = playWhenReady
-                            controller.prepare()
-                        }
-                    }, MoreExecutors.directExecutor())
-                }
-            },
-            update = { playerView ->
-                when (lifecycleEvent) {
-                    Lifecycle.Event.ON_START -> {
-
-                    }
-
-                    Lifecycle.Event.ON_STOP -> {
-                        controllerFuture?.let { MediaController.releaseFuture(it) }
-                        playerView.player?.release()
-                    }
-
-                    else -> {
-                        /** Do nothing */
-                    }
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(16 / 9f)
         )
 
         Text(
@@ -292,7 +312,9 @@ fun NowPlayingScreen(
             )
         }
 
-        var sliderPosition by remember { mutableFloatStateOf(0.5f) }
+        var sliderPosition by remember {
+            mutableFloatStateOf(mediaController?.currentPosition?.toFloat() ?: 0f)
+        }
 
         Slider(
             modifier = Modifier.padding(
@@ -305,8 +327,10 @@ fun NowPlayingScreen(
                 activeTrackColor = Color.White,
                 inactiveTrackColor = Grey898989
             ),
-            value = sliderPosition,
-            onValueChange = { sliderPosition = it },
+            value = playbackPosition.toFloat(),
+            onValueChange = {
+                mediaController?.seekTo(it.toLong())
+            },
         )
 
         Row(
@@ -352,8 +376,19 @@ fun NowPlayingScreen(
             ) {
 
                 PlaybackAction(
-                    actionIcon = R.drawable.ic_play,
+                    actionIcon = if (mediaController?.isPlaying == true) {
+                        R.drawable.ic_pause
+                    } else {
+                        R.drawable.ic_play
+                    },
                     actionTint = Color.Black,
+                    onActionClicked = {
+                        if (mediaController?.isPlaying == true) {
+                            mediaController?.pause()
+                        } else {
+                            mediaController?.play()
+                        }
+                    }
                 )
             }
 
@@ -412,7 +447,7 @@ private fun PlaybackAction(
 
     IconButton(onClick = { onActionClicked() }) {
         Icon(
-            modifier = Modifier.size(40.dp),
+            modifier = Modifier.size(35.dp),
             painter = painterResource(actionIcon),
             contentDescription = null,
             tint = actionTint,
@@ -434,5 +469,7 @@ private fun Modifier.conditional(
 @Preview
 @Composable
 private fun NowPlayingScreenPreview() {
-    NowPlayingScreen()
+    NowPlayingScreen(
+        songId = "1"
+    )
 }
