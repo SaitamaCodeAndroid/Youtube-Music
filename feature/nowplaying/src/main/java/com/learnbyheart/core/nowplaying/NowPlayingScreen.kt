@@ -78,20 +78,13 @@ fun NavController.navigateToNowPlaying(songId: String) = navigate("$NOW_PLAYING_
 
 fun NavGraphBuilder.nowPlayingScreen() {
     composable("$NOW_PLAYING_ROUTE/{songId}") { backStackEntry ->
-        val id = backStackEntry.arguments?.getString("songId")
+        val id = backStackEntry.arguments!!.getString("songId")!!
         NowPlayingScreen(songId = id)
     }
 }
 
-@OptIn(UnstableApi::class)
 @Composable
-fun NowPlayingScreen(
-    songId: String?,
-    /*exoPlayer: ExoPlayer? = null,
-    mediaItemIndex: Int = 0,
-    playWhenReady: Boolean = true,
-    playbackPosition: Long = 0,*/
-) {
+fun NowPlayingScreen(songId: String) {
     val data = TrackDisplayData(
         id = "",
         name = "Where Are Ü Now",
@@ -144,7 +137,7 @@ fun NowPlayingScreen(
                 controllerFuture.addListener({
                     controllerFuture.get().also { controller ->
                         mediaController = controller
-                        mediaController?.setMediaItems(
+                        controller?.setMediaItems(
                             listOf(MediaItem.fromUri(data.musicUrl)),
                             mediaItemIndex,
                             playbackPosition

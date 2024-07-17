@@ -5,13 +5,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -64,7 +66,7 @@ private fun HomeScreen(
     val homeDataUiState by viewModel.homeDataUiState.collectAsStateWithLifecycle()
 
     Box(
-        modifier = Modifier.wrapContentSize()
+        modifier = Modifier.fillMaxSize()
     ) {
 
         when (homeDataUiState) {
@@ -123,8 +125,8 @@ private fun HomeLayoutSection(
 
     Column(
         modifier = Modifier
-            .wrapContentSize()
             .verticalScroll(scrollState)
+            .fillMaxSize()
             .padding(vertical = 70.dp)
     ) {
         uiHomeData.forEach { homeData ->
@@ -151,7 +153,7 @@ private fun HomeLayoutSection(
 private fun PlaylistTypeSection(
     title: String,
     actionButtonText: String,
-    items: List<MusicDisplayData>
+    songs: List<MusicDisplayData>
 ) {
 
     Column(
@@ -168,15 +170,14 @@ private fun PlaylistTypeSection(
             actionButtonText = actionButtonText
         )
 
-        Row(
+        LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp)
-                .horizontalScroll(rememberScrollState())
         ) {
 
-            items.forEach { playlist ->
-                VerticalTypeItem(item = playlist)
+            items(songs) { song ->
+                VerticalTypeItem(item = song)
             }
         }
     }
