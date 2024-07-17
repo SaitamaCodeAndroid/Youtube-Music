@@ -53,8 +53,13 @@ dependencies {
 
     // Hilt
     // https://developer.android.com/jetpack/androidx/releases/hilt?hl=vi
-    val hiltVersion = "2.50"
+    val hiltVersion = "2.51"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
+
+    // Paging
+    // https://developer.android.com/jetpack/androidx/releases/paging
+    val pagingVersion = "3.2.1"
+    implementation("androidx.paging:paging-compose:$pagingVersion")
 
 }

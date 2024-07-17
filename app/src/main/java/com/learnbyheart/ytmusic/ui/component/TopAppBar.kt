@@ -29,11 +29,12 @@ import com.learnbyheart.spotify.R
 @Composable
 fun MusicTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(),
-    onSearchClick: () -> Unit,
+    onCastClicked: () -> Unit = {},
+    onSearchClick: () -> Unit = {},
 ) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-        title = { /*TODO*/ },
+        title = { /* Nothing to do */ },
         navigationIcon = {
             Row(
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -57,7 +58,7 @@ fun MusicTopAppBar(
         },
         actions = {
             IconButton(
-                onClick = onSearchClick
+                onClick = onCastClicked
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_cast),
@@ -85,6 +86,6 @@ fun MusicTopAppBar(
 @Composable
 fun MusicTopAppBarPreview() {
     Surface(color = Color.Black) {
-        MusicTopAppBar{}
+        MusicTopAppBar()
     }
 }

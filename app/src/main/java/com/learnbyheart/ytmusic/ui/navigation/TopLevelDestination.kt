@@ -21,11 +21,4 @@ enum class TopLevelDestination(
         outlineIconResource = R.drawable.ic_outline_home,
         filledIconResource = R.drawable.ic_filled_home,
     ),
-
-    Search(
-        route = "search_route",
-        label = "Search",
-        outlineIconResource = R.drawable.ic_search,
-        filledIconResource = R.drawable.ic_search,
-    )
 }

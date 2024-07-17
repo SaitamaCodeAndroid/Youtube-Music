@@ -39,7 +39,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.learnbyheart.core.nowplaying.navigateToNowPlaying
+import com.learnbyheart.core.nowplaying.nowPlayingScreen
+import com.learnbyheart.feature.home.HOME_ROUTE
 import com.learnbyheart.feature.home.homeScreen
+import com.learnbyheart.feature.search.navigateToSearch
 import com.learnbyheart.feature.search.searchScreen
 import com.learnbyheart.spotify.R
 import com.learnbyheart.ytmusic.ui.component.MusicTopAppBar
@@ -49,11 +53,13 @@ import com.learnbyheart.ytmusic.ui.theme.Grey808080
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppScreen(
-    appState: AppState = rememberAppState(),
     viewModel: AppViewModel = hiltViewModel()
 ) {
 
     val navController = rememberNavController()
+    val appState = rememberAppState(
+        navController = navController
+    )
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -61,13 +67,17 @@ fun AppScreen(
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
         topBar = {
-            MusicTopAppBar(scrollBehavior) {}
+            if (appState.isTopLevelDestination) {
+                MusicTopAppBar { navController.navigateToSearch() }
+            }
         },
         bottomBar = {
-            BottomBar(
-                topLevelDestinations = appState.topLevelDestinations,
-                onClicked = { appState.navigateToTopLevelDestination(it) }
-            )
+            if (appState.isTopLevelDestination) {
+                BottomBar(
+                    topLevelDestinations = appState.topLevelDestinations,
+                    onClicked = { appState.navigateToTopLevelDestination(it) }
+                )
+            }
         }
     ) { paddingValue ->
 
@@ -91,11 +101,18 @@ fun AppScreen(
 
             NavHost(
                 navController = navController,
-                startDestination = TopLevelDestination.Search.route,
+                startDestination = HOME_ROUTE,
             ) {
 
-                homeScreen()
-                searchScreen()
+                homeScreen(
+                    navigateToNowPlaying = { navController.navigateToNowPlaying(it) }
+                )
+
+                nowPlayingScreen()
+
+                searchScreen(
+                    onBackClick = navController::popBackStack
+                )
             }
         }
     }

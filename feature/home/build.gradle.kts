@@ -30,7 +30,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -77,7 +77,7 @@ dependencies {
 
     // Hilt
     // https://developer.android.com/jetpack/androidx/releases/hilt?hl=vi
-    val hiltVersion = "2.50"
+    val hiltVersion = "2.51"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
 
@@ -89,7 +89,7 @@ dependencies {
 
     // Media3
     // https://developer.android.com/jetpack/androidx/releases/media3?hl=vi
-    val media3Version = "1.2.1"
+    val media3Version = "1.3.0"
     implementation("androidx.media3:media3-exoplayer:$media3Version")
 
     // Navigation with hilt

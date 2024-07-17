@@ -55,7 +55,7 @@ dependencies {
 
     // Hilt
     // https://developer.android.com/jetpack/androidx/releases/hilt?hl=vi
-    val hiltVersion = "2.50"
+    val hiltVersion = "2.51"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
 
@@ -68,4 +68,5 @@ dependencies {
     // OkHttp
     val okHttpVersion = "4.12.0"
     implementation("com.squareup.okhttp3:okhttp:$okHttpVersion")
+    implementation("com.squareup.okhttp3:logging-interceptor:$okHttpVersion")
 }

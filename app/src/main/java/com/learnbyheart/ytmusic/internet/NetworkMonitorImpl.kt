@@ -40,6 +40,7 @@ class NetworkMonitorImpl @Inject constructor(
                 channel.trySend(networks.isNotEmpty())
             }
         }
+        channel.send(true)
         networkManager.registerNetworkCallback(request, callback)
 
         /**

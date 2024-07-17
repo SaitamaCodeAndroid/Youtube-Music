@@ -20,7 +20,7 @@ class HomeDataRepositoryImpl @Inject constructor(
         val response = dataSource.getCategories(
             token = token,
         )
-        emit(response)
+        emit(response.categoryMetadata.categories)
     }
 
     override suspend fun getRecommendationTracks(

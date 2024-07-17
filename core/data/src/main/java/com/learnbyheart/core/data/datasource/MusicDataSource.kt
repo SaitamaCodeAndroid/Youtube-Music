@@ -39,7 +39,7 @@ class MusicDataSource @Inject constructor(
     ) = withContext(Dispatchers.IO) {
         service.getCategories(
             authorization = token,
-            locale = DEFAULT_LOCALE,
+            locale = "zasdas",
         )
     }
 
@@ -68,6 +68,19 @@ class MusicDataSource @Inject constructor(
         service.getPlaylistsByCategory(
             authorization = token,
             category = category,
+        )
+    }
+
+    suspend fun search(
+        token: String,
+        query: String,
+        type: String,
+    ) = withContext(Dispatchers.IO) {
+        service.search(
+            authorization = token,
+            query = query,
+            type = type,
+            countryCode = DEFAULT_COUNTRY_CODE
         )
     }
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="search_bar_playholder">Search tracks, albums, artist and playlist</string>
+    <string name="search_result_header_button_show_more">More</string>
+    <string name="search_result_track_description_text">%1$s &#8226; %2$s</string>
+    <string name="search_result_album_description_text">%1$s &#8226; %2$s</string>
+    <string name="search_result_playlist_description_text">%1$s &#8226; %2$s tracks</string>
+    <plurals name="search_result_artist_description_text">
+        <item quantity="one">%d subscriber</item>
+        <item quantity="other">%d subscribers</item>
+    </plurals>
+
+</resources>
